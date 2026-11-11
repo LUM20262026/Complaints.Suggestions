@@ -92,13 +92,20 @@
 /* ---------------------------------------------------------------------------
    خلفية الجسم — تدرجات لطيفة + كتل ضوء ناعمة
 --------------------------------------------------------------------------- */
+/* منع التمرير الأفقي على الجوال (RTL) — نضعها على html وحدها لأنها
+   تُورَّث إلى نافذة المتصفح كاملاً، وبقاؤها في body وحده يُتجاهل في بعض
+   متصفحات الجوال (خصوصاً iOS) ويدّي تمريراً أفقياً لمكان فاضي */
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
 .lu-body {
   min-height: 100vh;
   background: linear-gradient(160deg, var(--lu-bg-1) 0%, var(--lu-bg-2) 100%);
   color: var(--lu-text);
   transition: background 0.35s ease, color 0.35s ease;
   position: relative;
-  overflow-x: hidden;
 }
 
 .lu-blob {

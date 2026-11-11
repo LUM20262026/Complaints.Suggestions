@@ -66,6 +66,16 @@
 .lu-form-card { max-width: 860px; margin: 0 auto; }
 .lu-form-card .card-glass-lg { padding: clamp(1.2rem, 3vw, 2.2rem); }
 
+/* بطاقة المتابعة أسفل الفورم */
+.lu-form-shell {
+  background: var(--lu-card);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-lg);
+  box-shadow: var(--lu-shadow);
+  -webkit-backdrop-filter: blur(var(--lu-blur));
+  backdrop-filter: blur(var(--lu-blur));
+}
+
 .lu-form-title {
   display: flex; align-items: center; gap: 0.6rem;
   font-weight: 800; font-size: 1.22rem; color: var(--lu-text); margin-bottom: 1.4rem;
@@ -146,13 +156,21 @@ textarea.lu-textarea {
 }
 @media (max-width: 575.98px) {
   .container, .container-fluid { padding-inline: 0.75rem; }
-  .lu-hero { padding: 1.4rem 0 0.8rem; }
-  .brand-logo { width: 62px; height: 62px; border-radius: 15px; }
-  .lu-hero h1 { font-size: 1.28rem; }
-  .lu-hero .lu-title-sub { font-size: 0.92rem; }
-  .lu-welcome { font-size: 0.92rem; }
-  .lu-desc { font-size: 0.86rem; }
+
+  /* رأس مضغوط: الفورم يظهر مباشرة أمام المستخدم من أول فتحة */
+  .lu-hero { padding: 0.9rem 0 0.5rem; }
+  .brand-logo { width: 50px; height: 50px; border-radius: 13px; }
+  .lu-hero h1 { font-size: 1.12rem; margin: 0.5rem 0 0.25rem; }
+  .lu-hero .lu-title-sub { font-size: 0.85rem; padding: 0.25rem 0.7rem; margin-bottom: 0.5rem; }
+  .lu-welcome { font-size: 0.86rem; margin-bottom: 0.15rem; }
+  .lu-desc {
+    font-size: 0.8rem; line-height: 1.6;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
   .lu-form-card .card-glass-lg { padding: 1rem; }
+  .lu-form-title { font-size: 1.08rem; margin-bottom: 1rem; }
   textarea.lu-textarea { min-height: 130px; }
   .lu-submit { font-size: 0.98rem; }
   .lu-char-counter { font-size: 0.75rem; }
@@ -167,12 +185,21 @@ textarea.lu-textarea {
   font-weight: 800;
 }
 
-/* حقل الفخ الأمني — غير مرئي للبشر يكشف روبوتات السبام */
+/* حقل الفخ الأمني — غير مرئي للبشر يكشف روبوتات السبام
+   ملاحظة مهمة: نستخدم قصّ الملف (clip) بدل إزاحته لـ left:-9999px
+   لأنه في الصفحات العربية (RTL) الإزاحة السلبية كانت تصنع مساحة تمرير
+   أفقية ضخمة وفاضية على الموبايل. */
 .lu-hp {
   position: absolute !important;
-  left: -9999px !important;
   width: 1px !important;
   height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
   opacity: 0 !important;
   pointer-events: none !important;
 }

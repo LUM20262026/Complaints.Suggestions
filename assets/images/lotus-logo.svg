@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="شعار جامعة اللوتس — زهرة اللوتس">
+  <defs>
+    <linearGradient id="lup1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1E7A5B"/>
+      <stop offset="100%" stop-color="#0E5A44"/>
+    </linearGradient>
+    <linearGradient id="lup2" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7A5FB5"/>
+      <stop offset="100%" stop-color="#5B44A0"/>
+    </linearGradient>
+    <linearGradient id="lup3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F2C14E"/>
+      <stop offset="100%" stop-color="#E89B2D"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="112" height="112" rx="26" fill="#FBFDFD"/>
+  <rect x="4" y="4" width="112" height="112" rx="26" fill="none" stroke="#E3EDEF" stroke-width="2"/>
+
+  <!-- البتلات الجانبية -->
+  <path d="M60 96 C 34 88, 16 66, 18 40 C 38 46, 54 64, 60 96 Z" fill="url(#lup1)" opacity="0.92"/>
+  <path d="M60 96 C 86 88, 104 66, 102 40 C 82 46, 66 64, 60 96 Z" fill="url(#lup1)" opacity="0.92"/>
+  <!-- البتلات الوسطى -->
+  <path d="M60 94 C 44 76, 36 52, 40 28 C 54 38, 60 62, 60 94 Z" fill="url(#lup2)" opacity="0.96"/>
+  <path d="M60 94 C 76 76, 84 52, 80 28 C 66 38, 60 62, 60 94 Z" fill="url(#lup2)" opacity="0.96"/>
+  <!-- البتلة المركزية -->
+  <path d="M60 92 C 54 70, 54 46, 60 26 C 66 46, 66 70, 60 92 Z" fill="url(#lup3)"/>
+  <!-- القاعدة المائية -->
+  <path d="M28 100 C 48 110, 72 110, 92 100 C 74 118, 46 118, 28 100 Z" fill="url(#lup1)" opacity="0.35"/>
+</svg>
