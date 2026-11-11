@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex, nofollow">
+  <title>لوحة الإدارة | جامعة اللوتس</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/lotus-logo.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet"
+        integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"
+        integrity="sha384-XGjxtQfXaH2tnPFa9x+ruJTuLE3Aa6LhHSWRr1XeTyhezb4abCG4ccI5AkVDxqC+" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet"
+        integrity="sha384-dCW5imOdApH6OwpFau8cZNKjqVbJYnCA5q+8YsMYP3XwXKsV6Jfz1u6MZLnXaBsS" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <link href="css/themes.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/admin.css" rel="stylesheet">
+  <link href="css/print.css" rel="stylesheet">
+</head>
+<body class="lu-body">
+
+  <div class="lu-blob a" aria-hidden="true"></div>
+  <div class="lu-blob b" aria-hidden="true"></div>
+  <div class="lu-blob c" aria-hidden="true"></div>
+
+  <!-- ===========================================================================
+       شاشة تسجيل الدخول
+  ========================================================================= -->
+  <div id="loginView" class="lu-login-wrap">
+    <div class="card-glass lu-login-card">
+      <div style="padding:1.9rem 1.6rem 1.6rem">
+        <img src="assets/images/lotus-logo.svg" class="lu-login-logo" alt="شعار جامعة اللوتس" width="74" height="74">
+        <h1 class="text-center" style="font-weight:800;font-size:1.25rem;color:var(--lu-text)">لوحة إدارة الشكاوى والمقترحات</h1>
+        <p class="text-center" style="color:var(--lu-text-muted);font-size:0.85rem">جامعة اللوتس — دخول خاص بالمديرين المصرح لهم</p>
+
+        <div id="loginError" class="alert alert-danger py-2 d-none" role="alert" style="font-size:0.86rem">
+          <i class="bi bi-exclamation-triangle-fill ms-1"></i>
+          <span id="loginErrorText"></span>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">البريد الإلكتروني</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+              <input type="email" class="form-control" id="loginEmail" autocomplete="username" placeholder="admin@lotus.edu" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">كلمة المرور</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+              <input type="password" class="form-control" id="loginPassword" autocomplete="current-password" placeholder="••••••••" required>
+              <button class="btn btn-outline-secondary" type="button" id="togglePwd" aria-label="إظهار وإخفاء كلمة المرور">
+                <i class="bi bi-eye-fill" id="togglePwdIcon"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn lu-btn lu-btn-primary w-100 mt-2" id="loginBtn">
+            <i class="bi bi-box-arrow-in-left ms-1"></i>
+            <span>تسجيل الدخول</span>
+          </button>
+        </form>
+        <p class="lu-login-note">
+          <i class="bi bi-shield-lock-fill ms-1"></i>
+          لا يمكن الوصول لوظائف النظام إلا بحساب مدير مصرح له.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===========================================================================
+       هيكل لوحة الإدارة
+  ========================================================================= -->
+  <div id="appShell" class="d-none">
+    <div class="lu-shell">
+
+      <!-- القائمة الجانبية -->
+      <aside id="sidebar" class="lu-sidebar" aria-label="القائمة الجانبية">
+        <div class="lu-sidebar-brand">
+          <img src="assets/images/lotus-logo.svg" alt="الشعار">
+          <div>
+            <div class="t">لوحة الإدارة</div>
+            <div class="s">جامعة اللوتس — نظام الشكاوى</div>
+          </div>
+        </div>
+
+        <nav class="lu-sidebar-nav" id="sidebarNav">
+          <div class="lu-nav-label">الرسائل</div>
+          <button class="lu-nav-item" data-route="messages-all"><i class="bi bi-inboxes-fill"></i> جميع الرسائل</button>
+          <button class="lu-nav-item" data-route="messages-complaints"><i class="bi bi-exclamation-octagon-fill"></i> الشكاوى</button>
+          <button class="lu-nav-item" data-route="messages-suggestions"><i class="bi bi-lightbulb-fill"></i> المقترحات</button>
+          <div class="lu-nav-label">حسب الحالة</div>
+          <button class="lu-nav-item" data-route="messages-new"><i class="bi bi-envelope-plus-fill"></i> الرسائل الجديدة <span class="lu-live-dot d-none" id="sideNewBadge">0</span></button>
+          <button class="lu-nav-item" data-route="messages-review"><i class="bi bi-eye-fill"></i> قيد المراجعة</button>
+          <button class="lu-nav-item" data-route="messages-replied"><i class="bi bi-chat-left-text-fill"></i> تم الرد عليها</button>
+          <button class="lu-nav-item" data-route="messages-resolved"><i class="bi bi-check-circle-fill"></i> تم الحل</button>
+          <button class="lu-nav-item" data-route="messages-archived"><i class="bi bi-archive-fill"></i> الأرشيف</button>
+
+          <div class="lu-nav-label">الإدارة</div>
+          <button class="lu-nav-item" data-route="reports"><i class="bi bi-graph-up-arrow"></i> التقارير والإحصائيات</button>
+          <button class="lu-nav-item" data-route="colleges" data-min-role="admin"><i class="bi bi-buildings-fill"></i> إدارة الكليات</button>
+          <button class="lu-nav-item" data-route="settings" data-min-role="admin"><i class="bi bi-sliders2"></i> إعدادات واجهة المستخدم</button>
+          <button class="lu-nav-item" data-route="admins" data-min-role="super_admin"><i class="bi bi-people-fill"></i> إدارة المديرين والصلاحيات</button>
+
+
+          <div class="lu-nav-label">الحساب</div>
+          <button class="lu-nav-item logout-link" id="logoutBtn"><i class="bi bi-box-arrow-right"></i> تسجيل الخروج</button>
+        </nav>
+      </aside>
+
+      <div class="lu-menu-backdrop" id="navBackdrop" aria-hidden="true"></div>
+
+      <!-- منطقة المحتوى -->
+      <div class="lu-main-area">
+
+        <!-- الشريط العلوي -->
+        <header class="lu-topbar">
+          <button class="lu-icon-btn lu-menu-btn" id="menuBtn" aria-label="فتح القائمة"><i class="bi bi-list"></i></button>
+          <h2 class="page-title" id="pageTitleTop">الرئيسية</h2>
+
+          <div class="ms-auto d-flex align-items-center gap-2">
+            <!-- جرس الإشعارات الفورية -->
+            <button class="lu-icon-btn" id="liveBell" title="الرسائل الجديدة — تحديث فوري" aria-label="الرسائل الجديدة">
+              <i class="bi bi-bell-fill"></i>
+              <span class="lu-badge-dot d-none" id="bellBadge">0</span>
+            </button>
+
+            <!-- نسخة احتياطية -->
+            <button class="lu-icon-btn" id="backupBtn" title="نسخة احتياطية من كل البيانات" aria-label="نسخة احتياطية">
+              <i class="bi bi-cloud-arrow-down-fill"></i>
+            </button>
+
+            <!-- تبديل الثيم -->
+            <button class="lu-icon-btn" data-theme-toggle aria-label="تبديل الوضع الداكن والنهاري">
+              <i class="lu-theme-icon bi bi-moon-stars-fill"></i>
+            </button>
+
+            <!-- معلومات المدير -->
+            <div class="dropdown">
+              <button class="lu-user-chip border-0" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false" style="cursor:pointer;">
+                <span class="avatar" id="userChipAvatar">—</span>
+                <span class="text-start d-none d-sm-block">
+                  <span class="n d-block" id="userChipName">...</span>
+                  <span class="r" id="userChipRole"></span>
+                </span>
+                <i class="bi bi-chevron-down small ms-1 d-none d-sm-inline"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
+                <li class="px-3 py-2 d-sm-none"><div class="fw-bold" id="userChipNameMobile"></div><small class="text-muted" id="userChipRoleMobile"></small></li>
+                <li class="d-sm-none"><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item" type="button" id="topPwBtn"><i class="bi bi-key-fill ms-2"></i>تغيير كلمة المرور</button></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item text-danger" type="button" id="topLogout"><i class="bi bi-box-arrow-right ms-2"></i>تسجيل الخروج</button></li>
+              </ul>
+            </div>
+          </div>
+        </header>
+
+        <!-- المحتوى -->
+        <main class="lu-content">
+
+          <!-- =============================================================
+               1) الرئيسية (Dashboard)
+          ============================================================ -->
+          <section id="sec-dashboard" class="lu-section">
+            <div class="lu-section-head">
+              <h2><i class="bi bi-speedometer2 ms-1" style="color:var(--lu-primary)"></i> لوحة الإحصائيات الرئيسية</h2>
+              <div class="d-flex gap-2 flex-wrap" id="rangeChips">
+                <button class="lu-chip active" data-range="all">كل الفترات</button>
+                <button class="lu-chip" data-range="7">آخر 7 أيام</button>
+                <button class="lu-chip" data-range="30">آخر 30 يوماً</button>
+                <button class="lu-chip" data-range="month">هذا الشهر</button>
+              </div>
+            </div>
+
+            <div id="dashLoading" class="lu-loading"><div class="spinner-border" style="color:var(--lu-primary)"></div> جاري تحميل الإحصائيات...</div>
+
+            <div id="dashBody" class="d-none">
+              <!-- بطاقات الإحصائيات -->
+              <div class="row g-3 mb-4" id="kpiGrid">
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="total" data-goto="messages-all">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#1E7A5B"><i class="bi bi-inboxes-fill"></i></span><span><span class="k-num" id="kpiTotal">0</span><span class="k-t d-block">إجمالي عدد الرسائل</span></span></div>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="complaints" data-goto="messages-complaints">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#EF4444"><i class="bi bi-exclamation-octagon-fill"></i></span><span><span class="k-num" id="kpiComplaints">0</span><span class="k-t d-block">إجمالي الشكاوى</span></span></div>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="suggestions" data-goto="messages-suggestions">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#3B82F6"><i class="bi bi-lightbulb-fill"></i></span><span><span class="k-num" id="kpiSuggestions">0</span><span class="k-t d-block">إجمالي المقترحات</span></span></div>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="new" data-goto="messages-new">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#3B82F6"><i class="bi bi-envelope-plus-fill"></i></span><span><span class="k-num" id="kpiNew">0</span><span class="k-t d-block">الرسائل الجديدة</span></span></div>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="review" data-goto="messages-review">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#F59E0B"><i class="bi bi-eye-fill"></i></span><span><span class="k-num" id="kpiReview">0</span><span class="k-t d-block">قيد المراجعة</span></span></div>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="replied" data-goto="messages-replied">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#8B5CF6"><i class="bi bi-chat-left-text-fill"></i></span><span><span class="k-num" id="kpiReplied">0</span><span class="k-t d-block">تم الرد عليها</span></span></div>
+                  </button>
+                </div>
+                <div class="col-6 col-md-4 col-xxl-3">
+                  <button class="lu-kpi" data-kpi="resolved" data-goto="messages-resolved">
+                    <div class="d-flex align-items-center gap-3"><span class="k-ic" style="--kpi-color:#10B981"><i class="bi bi-check-circle-fill"></i></span><span><span class="k-num" id="kpiResolved">0</span><span class="k-t d-block">تم الحل</span></span></div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- الرسوم البيانية -->
+              <div class="row g-3" id="chartsWrap">
+                <div class="col-lg-4">
+                  <div class="chart-card h-100">
+                    <h6><i class="bi bi-pie-chart-fill ms-1"></i> الشكاوى مقابل المقترحات</h6>
+                    <div class="chart-box"><canvas id="typeChart"></canvas></div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="chart-card h-100">
+                    <h6><i class="bi bi-buildings ms-1"></i> الرسائل حسب الكلية</h6>
+                    <div class="chart-box tall"><canvas id="collegeChart"></canvas></div>
+                  </div>
+                </div>
+                <div class="col-lg-4">
+                  <div class="chart-card h-100">
+                    <h6><i class="bi bi-layers-fill ms-1"></i> حالات الرسائل</h6>
+                    <div class="chart-box tall"><canvas id="statusChart"></canvas></div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="chart-card h-100">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                      <h6 class="mb-0"><i class="bi bi-graph-up ms-1"></i> تطور عدد الرسائل</h6>
+                      <div class="d-flex gap-1" id="trendChips">
+                        <button class="lu-chip active" data-trendmode="day">أيام</button>
+                        <button class="lu-chip" data-trendmode="month">شهور</button>
+                      </div>
+                    </div>
+                    <div class="chart-box"><canvas id="trendChart"></canvas></div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="chart-card h-100">
+                    <h6><i class="bi bi-bar-chart-fill ms-1"></i> مقارنة بين الفترات الزمنية</h6>
+                    <div class="chart-box"><canvas id="compareChart"></canvas></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============================================================
+               2) الرسائل
+          ============================================================ -->
+          <section id="sec-messages" class="lu-section">
+            <div class="lu-section-head">
+              <h2 id="messagesTitle"><i class="bi bi-inboxes-fill ms-1" style="color:var(--lu-primary)"></i> جميع الرسائل</h2>
+              <small class="text-muted" id="viewerNote"><i class="bi bi-info-circle ms-1"></i> حسابك بصلاحية عرض فقط</small>
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn lu-btn lu-btn-secondary" id="btnExportView"><i class="bi bi-file-earmark-excel-fill ms-1"></i> تصدير Excel</button>
+                <button class="btn lu-btn lu-btn-primary" id="btnPrintView"><i class="bi bi-printer-fill ms-1"></i> طباعة الكل</button>
+              </div>
+            </div>
+
+            <!-- البحث والفلاتر -->
+            <div class="card-glass mb-3" style="padding:1.05rem 1.15rem">
+              <div class="row g-2 align-items-end">
+                <div class="col-lg-4 col-md-6">
+                  <label class="form-label mb-1" for="fSearch"><small>بحث (الرقم المرجعي / الاسم / النص)</small></label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="fSearch" placeholder="اكتب كلمة للبحث...">
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <label class="form-label mb-1" for="fCollege"><small>الكلية</small></label>
+                  <select class="form-select" id="fCollege"><option value="">الكل</option></select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <label class="form-label mb-1" for="fType"><small>النوع</small></label>
+                  <select class="form-select" id="fType">
+                    <option value="">الكل</option>
+                    <option value="complaint">شكوى</option>
+                    <option value="suggestion">اقتراح</option>
+                  </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <label class="form-label mb-1" for="fStatus"><small>الحالة</small></label>
+                  <select class="form-select" id="fStatus"><option value="">الكل</option></select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <label class="form-label mb-1" for="fFrom"><small>من تاريخ</small></label>
+                  <input type="date" class="form-control" id="fFrom">
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <label class="form-label mb-1" for="fTo"><small>إلى تاريخ</small></label>
+                  <input type="date" class="form-control" id="fTo">
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <label class="form-label mb-1" for="fSort"><small>الترتيب</small></label>
+                  <select class="form-select" id="fSort">
+                    <option value="desc">الأحدث أولاً</option>
+                    <option value="asc">الأقدم أولاً</option>
+                  </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <button class="btn lu-btn lu-btn-primary w-100" id="applyFilters"><i class="bi bi-funnel-fill ms-1"></i> تطبيق الفلاتر</button>
+                </div>
+                <div class="col-lg-2 col-md-4 col-6">
+                  <button class="btn lu-btn w-100" id="clearFilters" style="background:var(--lu-input-bg);border:1px solid var(--lu-border-strong);color:var(--lu-text)"><i class="bi bi-x-circle ms-1"></i> مسح الفلاتر</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- جدول الرسائل -->
+            <div class="lu-table-card">
+              <div id="messagesLoading" class="lu-loading"><div class="spinner-border" style="color:var(--lu-primary)"></div> جاري تحميل الرسائل...</div>
+
+              <div class="table-responsive" id="messagesWrap">
+                <table class="table align-middle">
+                  <thead>
+                    <tr>
+                      <th>الرقم المرجعي</th>
+                      <th>تاريخ الإرسال</th>
+                      <th>اسم صاحب الرسالة</th>
+                      <th>الكلية</th>
+                      <th>النوع</th>
+                      <th>ملخص الرسالة</th>
+                      <th>الحالة</th>
+                      <th class="text-center">إجراءات</th>
+                    </tr>
+                  </thead>
+                  <tbody id="messagesTbody"></tbody>
+                </table>
+              </div>
+
+              <div id="messagesEmpty" class="lu-empty d-none">
+                <i class="bi bi-inbox"></i>
+                <h6>لا توجد رسائل مطابقة</h6>
+                <small>جرّب تعديل الفلاتر أو انتظر وصول رسائل جديدة</small>
+              </div>
+
+              <div class="lu-grid-footer">
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                  <span>النتيجة: <b id="resultsCount">0</b> رسالة</span>
+                  <span>·</span>
+                  <label class="mb-0">عدد السجلات في الصفحة</label>
+                  <select class="form-select form-select-sm" id="pageSize" style="width:80px">
+                    <option>10</option><option selected>25</option><option>50</option><option>100</option>
+                  </select>
+                </div>
+                <nav aria-label="ترقيم الصفحات"><ul class="pagination mb-0" id="pagination"></ul></nav>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============================================================
+               3) التقارير والإحصائيات
+          ============================================================ -->
+          <section id="sec-reports" class="lu-section">
+            <div class="lu-section-head">
+              <h2><i class="bi bi-graph-up-arrow ms-1" style="color:var(--lu-primary)"></i> التقارير والتصدير والطباعة</h2>
+            </div>
+
+            <!-- فلاتر التقرير -->
+            <div class="card-glass mb-3" style="padding:1.05rem 1.15rem">
+              <div class="row g-2 align-items-end">
+                <div class="col-lg-2 col-md-3 col-6">
+                  <label class="form-label mb-1" for="rFrom"><small>من تاريخ</small></label>
+                  <input type="date" class="form-control" id="rFrom">
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                  <label class="form-label mb-1" for="rTo"><small>إلى تاريخ</small></label>
+                  <input type="date" class="form-control" id="rTo">
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <label class="form-label mb-1" for="rCollege"><small>الكلية</small></label>
+                  <select class="form-select" id="rCollege"><option value="">جميع الكليات</option></select>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                  <label class="form-label mb-1 d-block"><small>النوع</small></label>
+                  <div class="d-flex gap-3 pt-1">
+                    <div class="form-check"><input class="form-check-input" type="checkbox" id="rTypeC" checked><label class="form-check-label" for="rTypeC" style="font-size:0.86rem">شكاوى</label></div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox" id="rTypeS" checked><label class="form-check-label" for="rTypeS" style="font-size:0.86rem">مقترحات</label></div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <label class="form-label mb-1 d-block"><small>الحالة (اتركها فارغة = كل الحالات)</small></label>
+                  <div class="d-flex flex-wrap gap-2 pt-1" id="rStatuses"></div>
+                </div>
+                <div class="col-lg-6 col-md-6 d-flex gap-3 align-items-center flex-wrap">
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="incReply" checked><label class="form-check-label" for="incReply" style="font-size:0.86rem">تضمين الرد الرسمي في التصدير</label></div>
+                  <div class="form-check"><input class="form-check-input" type="checkbox" id="incNotes"><label class="form-check-label" for="incNotes" style="font-size:0.86rem">تضمين الملاحظات الداخلية (سري)</label></div>
+                </div>
+                <div class="col-lg-6 d-flex justify-content-end gap-2 flex-wrap">
+                  <button class="btn lu-btn lu-btn-primary" id="rApply"><i class="bi bi-funnel-fill ms-1"></i> إنشاء التقرير</button>
+                  <button class="btn" id="rClear" style="background:var(--lu-input-bg);border:1px solid var(--lu-border-strong);color:var(--lu-text)"><i class="bi bi-x-circle ms-1"></i> مسح</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ملخص التقرير -->
+            <div class="card-glass mb-3" style="padding:1.05rem 1.15rem">
+              <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <div><b id="reportMeta">التقرير: جميع الرسائل — كل الفترات</b></div>
+                <div class="d-flex gap-2 flex-wrap">
+                  <button class="btn lu-btn lu-btn-secondary" id="btnXlsx"><i class="bi bi-file-earmark-excel-fill ms-1"></i> تصدير Excel XLSX</button>
+                  <button class="btn lu-btn lu-btn-secondary" id="btnCsv"><i class="bi bi-filetype-csv ms-1"></i> تصدير CSV</button>
+                  <button class="btn lu-btn lu-btn-primary" id="btnPrint"><i class="bi bi-printer-fill ms-1"></i> طباعة / PDF</button>
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-wrap" id="rKpis"></div>
+            </div>
+
+            <!-- معاينة السجلات -->
+            <div class="lu-table-card">
+              <div class="px-3 pt-3">
+                <small class="text-muted"><i class="bi bi-info-circle ms-1"></i> هذه معاينة لأول 50 رسالة من نتائج التقرير — التصدير أو الطباعة شاملة لكل السجلات المطابقة للفلاتر</small>
+              </div>
+              <div id="reportLoading" class="lu-loading d-none"><div class="spinner-border" style="color:var(--lu-primary)"></div> جاري جلب السجلات...</div>
+              <div class="table-responsive d-none" id="reportWrap">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>الرقم</th><th>التاريخ</th><th>النوع</th><th>الكلية</th><th>الاسم</th><th>النص</th><th>الحالة</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reportTbody"></tbody>
+                </table>
+              </div>
+              <div id="reportEmpty" class="lu-empty d-none">
+                <i class="bi bi-clipboard-x"></i>
+                <h6>لا توجد سجلات مطابقة لفلاتر التقرير</h6>
+              </div>
+              <div class="lu-grid-footer">
+                <span id="reportRangeInfo"></span>
+                <nav><ul class="pagination mb-0" id="rPagination"></ul></nav>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============================================================
+               4) إدارة الكليات
+          ============================================================ -->
+          <section id="sec-colleges" class="lu-section">
+            <div class="lu-section-head">
+              <h2><i class="bi bi-buildings-fill ms-1" style="color:var(--lu-primary)"></i> إدارة الكليات</h2>
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn lu-btn lu-btn-secondary" id="collegeExportBtn"><i class="bi bi-file-earmark-excel-fill ms-1"></i> تصدير Excel</button>
+                <button class="btn lu-btn lu-btn-primary" id="collegePrintBtn"><i class="bi bi-printer-fill ms-1"></i> طباعة</button>
+                <button class="btn lu-btn lu-btn-primary" id="collegeAddBtn"><i class="bi bi-plus-lg ms-1"></i> إضافة كلية</button>
+              </div>
+            </div>
+
+            <div class="lu-table-card">
+              <div id="collegesLoading" class="lu-loading"><div class="spinner-border" style="color:var(--lu-primary)"></div> جاري التحميل...</div>
+              <div class="table-responsive" id="collegesWrap">
+                <table class="table">
+                  <thead>
+                    <tr><th style="width:70px">الترتيب</th><th>اسم الكلية</th><th style="width:110px">ظاهرة بالنموذج؟</th><th style="width:120px">عدد الرسائل</th><th class="text-center" style="width:220px">إجراءات</th></tr>
+                  </thead>
+                  <tbody id="collegeTbody"></tbody>
+                </table>
+              </div>
+              <div id="collegesEmpty" class="lu-empty d-none"><i class="bi bi-buildings"></i><h6>لا توجد كليات</h6></div>
+            </div>
+            <small class="text-muted d-block mt-2"><i class="bi bi-shield-check ms-1"></i> الكلية المرتبطة برسائل لا تُحذف — استخدم «إخفاء» لإيقاف ظهورها دون التأثير على التقارير القديمة</small>
+          </section>
+
+          <!-- =============================================================
+               5) إعدادات واجهة المستخدم
+          ============================================================ -->
+          <section id="sec-settings" class="lu-section">
+            <div class="lu-section-head">
+              <h2><i class="bi bi-sliders2 ms-1" style="color:var(--lu-primary)"></i> إعدادات واجهة المستخدم</h2>
+              <button class="btn" id="openPwModal" style="background:var(--lu-input-bg);border:1px solid var(--lu-border-strong);color:var(--lu-text)"><i class="bi bi-key-fill ms-1"></i> تغيير كلمة المرور</button>
+            </div>
+
+            <ul class="nav nav-pills mb-3 gap-2" style="--bs-nav-pills-border-radius:12px">
+              <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tabContent" type="button" id="tabContentBtn"><i class="bi bi-type ms-1"></i> المحتوى</button></li>
+              <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tabForm" type="button"><i class="bi bi-wrench-fill"></i> النموذج</button></li>
+              <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tabDesign" type="button"><i class="bi bi-palette-fill ms-1"></i> التصميم</button></li>
+            </ul>
+
+            <div class="tab-content">
+              <!-- تبويب المحتوى -->
+              <div class="tab-pane fade show active" id="tabContent">
+                <div class="card-glass" style="padding:1.3rem">
+                  <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">اسم الجامعة المعروض</label><input type="text" class="form-control" id="sUnivName"></div>
+                    <div class="col-md-6"><label class="form-label">عنوان المنصة</label><input type="text" class="form-control" id="sPageTitle"></div>
+                    <div class="col-12"><label class="form-label">العنوان الترحيبي</label><input type="text" class="form-control" id="sWelcome"></div>
+                    <div class="col-12"><label class="form-label">النص التعريفي</label><textarea class="form-control" id="sDesc" rows="3"></textarea></div>
+                    <div class="col-md-4"><label class="form-label">نص زر الإرسال</label><input type="text" class="form-control" id="sSubmitText"></div>
+                    <div class="col-md-4"><label class="form-label">رسالة نجاح الإرسال</label><input type="text" class="form-control" id="sSuccessMsg"></div>
+                    <div class="col-md-4"><label class="form-label">نص أسفل الصفحة</label><input type="text" class="form-control" id="sFooter"></div>
+                    <div class="col-md-3"><label class="form-label">اسم خيار الشكوى</label><input type="text" class="form-control" id="sLabelC"></div>
+                    <div class="col-md-3"><label class="form-label">اسم خيار الاقتراح</label><input type="text" class="form-control" id="sLabelS"></div>
+                    <div class="col-md-6"><label class="form-label">النص الإرشادي للشكوى (Placeholder)</label><input type="text" class="form-control" id="sPhC"></div>
+                    <div class="col-md-6"><label class="form-label">النص الإرشادي للاقتراح (Placeholder)</label><input type="text" class="form-control" id="sPhS"></div>
+
+                    <!-- شعار الجامعة -->
+                    <div class="col-md-6">
+                      <label class="form-label">شعار الجامعة</label>
+                      <div class="d-flex align-items-center gap-3">
+                        <img id="sLogoPrev" src="assets/images/lotus-logo.svg" alt="معاينة الشعار" style="width:58px;height:58px;border-radius:14px;border:1px solid var(--lu-border-strong);background:#fff;padding:4px">
+                        <div class="d-flex flex-column gap-1">
+                          <input type="file" class="form-control form-control-sm" id="sLogoFile" accept="image/png,image/jpeg,image/webp">
+                          <button class="btn btn-sm btn-outline-danger" id="sLogoClear" type="button"><i class="bi bi-trash ms-1"></i> إزالة الشعار المخصص</button>
+                        </div>
+                      </div>
+                      <small class="text-muted">PNG / JPG / WEBP / SVG — أفضل أحجام مربعة</small>
+                    </div>
+
+                    <!-- الألوان -->
+                    <div class="col-md-6">
+                      <label class="form-label">ألوان الهوية البصرية</label>
+                      <div class="d-flex align-items-center gap-2 mb-2">
+                        <input type="color" class="form-control form-control-color" id="sColorPrimary" style="width:46px" title="اللون الأساسي">
+                        <input type="text" class="form-control" id="sColorPrimaryHex" maxlength="7">
+                        <span class="small text-muted">اللون الأساسي</span>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <input type="color" class="form-control form-control-color" id="sColorSecondary" style="width:46px" title="اللون الثانوي">
+                        <input type="text" class="form-control" id="sColorSecondaryHex" maxlength="7">
+                        <span class="small text-muted">اللون الثانوي</span>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <button class="btn lu-btn lu-btn-primary" id="saveContent"><i class="bi bi-save-fill ms-1"></i> حفظ إعدادات المحتوى</button>
+                      <small class="text-muted d-block mt-2">التغييرات تظهر مباشرة في الصفحة الرئيسية فور الحفظ — دون أي تعديل على الملفات</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- تبويب النموذج -->
+              <div class="tab-pane fade" id="tabForm">
+                <div class="card-glass" style="padding:1.3rem">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="sFormEnabled">
+                        <label class="form-check-label" for="sFormEnabled" style="font-weight:700">استقبال الرسائل مفعّل</label>
+                        <small class="d-block text-muted">عند الإيقاف تظهر رسالة الإيقاف بدلاً من النموذج في الصفحة العامة</small>
+                      </div>
+                    </div>
+                    <div class="col-md-6"><label class="form-label">رسالة الإيقاف المؤقت لاستقبال الرسائل</label><textarea class="form-control" id="sClosedMsg" rows="2"></textarea></div>
+
+                    <div class="col-md-4"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sAllowC"><label class="form-check-label" for="sAllowC" style="font-weight:700">تفعيل الشكاوى</label></div></div>
+                    <div class="col-md-4"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sAllowS"><label class="form-check-label" for="sAllowS" style="font-weight:700">تفعيل المقترحات</label></div></div>
+                    <div class="col-md-4"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sShowName"><label class="form-check-label" for="sShowName" style="font-weight:700">إظهار حقل الاسم</label></div></div>
+                    <div class="col-md-4"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sNameRequired"><label class="form-check-label" for="sNameRequired" style="font-weight:700">جعل الاسم إجبارياً</label></div></div>
+                    <div class="col-md-4"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="sRequireCollege"><label class="form-check-label" for="sRequireCollege" style="font-weight:700">إجبارية اختيار الكلية</label></div></div>
+
+                    <div class="col-md-3"><label class="form-label">الحد الأدنى للأحرف</label><input type="number" class="form-control" id="sMinLen" min="0" max="1000"></div>
+                    <div class="col-md-3"><label class="form-label">الحد الأقصى للأحرف</label><input type="number" class="form-control" id="sMaxLen" min="10" max="50000"></div>
+
+                    <div class="col-12">
+                      <button class="btn lu-btn lu-btn-primary" id="saveForm"><i class="bi bi-save-fill ms-1"></i> حفظ إعدادات النموذج</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- تبويب التصميم -->
+              <div class="tab-pane fade" id="tabDesign">
+                <div class="card-glass" style="padding:1.3rem">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">الوضع الافتراضي للمستخدمين</label>
+                      <select class="form-select" id="sDefaultTheme">
+                        <option value="light">الوضع النهاري (فاتح)</option>
+                        <option value="dark">الوضع الداكن (كحلي)</option>
+                      </select>
+                      <small class="text-muted d-block mt-1">يمسّ اختيار المستخدم في جهازه هذا الإعداد؛ إن لم يوافق المستخدم اختاره يُطبق هذا الوضع الافتراضي</small>
+                    </div>
+                    <div class="col-12">
+                      <button class="btn lu-btn lu-btn-primary" id="saveDesign"><i class="bi bi-save-fill ms-1"></i> حفظ إعدادات التصميم</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =============================================================
+               6) إدارة المديرين والصلاحيات
+          ============================================================ -->
+          <section id="sec-admins" class="lu-section">
+            <div class="lu-section-head">
+              <h2><i class="bi bi-people-fill ms-1" style="color:var(--lu-primary)"></i> إدارة المديرين والصلاحيات</h2>
+              <div class="d-flex gap-2 flex-wrap">
+                <button class="btn lu-btn lu-btn-secondary" id="adminExportBtn"><i class="bi bi-file-earmark-excel-fill ms-1"></i> تصدير Excel</button>
+                <button class="btn lu-btn lu-btn-primary" id="adminPrintBtn"><i class="bi bi-printer-fill ms-1"></i> طباعة</button>
+                <button class="btn lu-btn lu-btn-primary" id="adminAddBtn"><i class="bi bi-person-plus-fill ms-1"></i> إضافة مدير</button>
+              </div>
+            </div>
+
+            <div class="alert" style="background:var(--lu-soft);border:1px solid var(--lu-border);color:var(--lu-text);font-size:0.86rem">
+              <i class="bi bi-info-circle-fill ms-1"></i>
+              لإضافة مدير جديد: تأكد من وجود حسابه أولاً، ثم أضف بريده هنا وحدد الصلاحية المناسبة.
+            </div>
+
+            <div class="lu-table-card">
+              <div id="adminsLoading" class="lu-loading"><div class="spinner-border" style="color:var(--lu-primary)"></div> جاري التحميل...</div>
+              <div class="table-responsive" id="adminsWrap">
+                <table class="table">
+                  <thead><tr><th>الاسم</th><th>البريد</th><th>الدور</th><th>نشط؟</th><th>أضيف في</th><th class="text-center">إجراءات</th></tr></thead>
+                  <tbody id="adminsTbody"></tbody>
+                </table>
+              </div>
+              <div id="adminsEmpty" class="lu-empty d-none"><i class="bi bi-people"></i><h6>لا يوجد مديرون</h6></div>
+            </div>
+          </section>
+
+          <!-- =============================================================
+               7) سجل العمليات
+          ============================================================ -->
+          <section id="sec-audit" class="lu-section">
+            <div class="lu-section-head">
+              <h2><i class="bi bi-journal-text ms-1" style="color:var(--lu-primary)"></i> سجل العمليات</h2>
+              <div class="d-flex gap-2">
+                <div class="input-group" style="width:280px">
+                  <span class="input-group-text"><i class="bi bi-search"></i></span>
+                  <input type="text" class="form-control" id="auditSearch" placeholder="بحث في العمليات...">
+                </div>
+                <button class="btn lu-btn lu-btn-primary" id="auditApply">تطبيق</button>
+              </div>
+            </div>
+
+            <div class="lu-table-card">
+              <div id="auditLoading" class="lu-loading"><div class="spinner-border" style="color:var(--lu-primary)"></div> جاري التحميل...</div>
+              <div class="table-responsive" id="auditWrap">
+                <table class="table">
+                  <thead><tr><th>#</th><th>التاريخ والوقت</th><th>المستخدم</th><th>العملية</th><th>الجدول</th><th>تفاصيل</th></tr></thead>
+                  <tbody id="auditTbody"></tbody>
+                </table>
+              </div>
+              <div id="auditEmpty" class="lu-empty d-none"><i class="bi bi-journal-x"></i><h6>لا توجد عمليات مسجلة</h6></div>
+              <div class="lu-grid-footer">
+                <span id="auditInfo"></span>
+                <nav><ul class="pagination mb-0" id="auditPagination"></ul></nav>
+              </div>
+            </div>
+          </section>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===========================================================================
+       نافذة تفاصيل الرسالة
+  ========================================================================= -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="lu-detail-head w-100">
+            <i class="bi bi-envelope-open-heart-fill" style="font-size:1.4rem;color:var(--lu-primary)"></i>
+            <h5 class="modal-title" id="dRef" style="font-variant-numeric:tabular-nums"></h5>
+            <span id="dSeenBadge"></span>
+            <span id="dTypeBadge"></span>
+            <span id="dStatusBadge"></span>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="lu-kv">
+                <span class="k">تاريخ ووقت الإرسال</span><span class="v" id="dDate"></span>
+                <span class="k">اسم صاحب الرسالة</span><span class="v" id="dSender"></span>
+                <span class="k">الكلية</span><span class="v" id="dCollege"></span>
+                <span class="k">نوع الرسالة</span><span class="v" id="dTypeT"></span>
+                <span class="k">آخر تحديث</span><span class="v" id="dUpdated"></span>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="lu-inner-title"><i class="bi bi-text-paragraph"></i> النص الكامل للرسالة</div>
+              <div class="lu-message-block" id="dMessage"></div>
+            </div>
+
+            <!-- إجراءات الإدارة -->
+            <div class="col-12" id="dAdminArea">
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="lu-card-inner">
+                    <div class="lu-inner-title"><i class="bi bi-arrow-repeat"></i> تغيير الحالة</div>
+                    <select class="form-select form-select-sm" id="dStatusSel"></select>
+                    <small class="text-muted d-block mt-2">يُسجل تغيير الحالة في سجل التغييرات</small>
+                    <hr class="my-2">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" role="switch" id="dTrackVisible" checked>
+                      <label class="form-check-label" for="dTrackVisible" style="font-size:0.86rem">إظهار حالة الرسالة للمستخدم في صفحة المتابعة</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="lu-card-inner">
+                    <div class="lu-inner-title"><i class="bi bi-chat-heart"></i> الرد الرسمي</div>
+                    <textarea class="form-control" id="dReply" rows="4" placeholder="اكتب الرد الرسمي على هذه الرسالة..."></textarea>
+                    <div class="d-flex align-items-center justify-content-between mt-2 flex-wrap gap-2">
+                      <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="dAutoReply" checked>
+                        <label class="form-check-label" for="dAutoReply" style="font-size:0.82rem">تحديث الحالة إلى «تم الرد» تلقائياً عند الحفظ</label>
+                      </div>
+                      <button class="btn btn-sm lu-btn lu-btn-primary" id="dSaveReply"><i class="bi bi-send-fill ms-1"></i> حفظ الرد</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="lu-card-inner">
+                    <div class="lu-inner-title"><i class="bi bi-lock-fill"></i> ملاحظات داخلية (لا تظهر للمستخدم)</div>
+                    <textarea class="form-control" id="dNotes" rows="3" placeholder="ملاحظات للفريق الإداري فقط — لا تظهر للمستخدمين"></textarea>
+                    <div class="d-flex justify-content-end mt-2">
+                      <button class="btn btn-sm lu-btn lu-btn-secondary" id="dSaveNotes"><i class="bi bi-sticky ms-1"></i> حفظ الملاحظات</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="lu-card-inner h-100">
+                    <div class="lu-inner-title"><i class="bi bi-clock-history"></i> سجل تغيّرات الرسالة</div>
+                    <div style="max-height:150px;overflow:auto">
+                      <table class="table table-sm mb-0">
+                        <thead><tr><th>الوقت</th><th>الإجراء</th><th>التفاصيل</th></tr></thead>
+                        <tbody id="dHistoryTbody"><tr><td colspan="3" class="text-muted small">—</td></tr></tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm" id="dPrint" style="background:var(--lu-input-bg);border:1px solid var(--lu-border-strong);color:var(--lu-text)"><i class="bi bi-printer-fill ms-1"></i> طباعة الرسالة</button>
+          <button class="btn btn-sm btn-danger" id="dDelete"><i class="bi bi-trash3-fill ms-1"></i> حذف نهائي</button>
+          <button class="btn btn-sm" id="dArchive" style="background:var(--lu-input-bg);border:1px solid var(--lu-border-strong);color:var(--lu-text)"><i class="bi bi-archive-fill ms-1"></i> أرشفة الرسالة</button>
+          <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إضافة/تعديل كلية -->
+  <div class="modal fade" id="collegeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title" id="collegeModalTitle">إضافة كلية</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <form id="collegeForm">
+            <input type="hidden" id="collegeIdInput">
+            <div class="mb-3"><label class="form-label">اسم الكلية</label><input type="text" class="form-control" id="collegeNameInput" maxlength="120" required></div>
+            <div class="mb-2"><label class="form-label">ترتيب الظهور</label><input type="number" class="form-control" id="collegeOrderInput" min="1" required></div>
+            <small class="text-muted">تعديل الاسم لا يؤثر على التقارير القديمة — أسماء كليات رسائلك السابقة محفوظة كلقطة مستقلة</small>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+          <button class="btn btn-sm lu-btn lu-btn-primary" id="collegeSaveBtn"><i class="bi bi-save-fill ms-1"></i> حفظ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إضافة مدير -->
+  <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">إضافة / تحديث مدير</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <div class="mb-3"><label class="form-label">بريد المستخدم</label><input type="email" class="form-control" id="aEmail" required></div>
+          <div class="mb-3"><label class="form-label">الاسم الكامل</label><input type="text" class="form-control" id="aName" maxlength="120" required></div>
+          <div class="mb-1"><label class="form-label">الدور</label>
+            <select class="form-select" id="aRole">
+              <option value="viewer">عرض فقط (viewer)</option>
+              <option value="admin">مدير (admin)</option>
+              <option value="super_admin" selected>سوبر أدمن (super_admin)</option>
+            </select>
+          </div>
+          <small class="text-muted">viewer: قراءة الرسائل والتقارير فقط — admin: كل الصلاحيات ما عدا إدارة المديرين — super_admin: كامل الصلاحيات</small>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+          <button class="btn btn-sm lu-btn lu-btn-primary" id="adminSaveBtn"><i class="bi bi-person-check-fill ms-1"></i> حفظ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تغيير كلمة المرور الشخصية -->
+  <div class="modal fade" id="pwModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">تغيير كلمة المرور</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+          <div class="mb-3"><label class="form-label">كلمة المرور الحالية</label><input type="password" class="form-control" id="pwCurrent" autocomplete="current-password" required></div>
+          <div class="mb-3"><label class="form-label">كلمة المرور الجديدة</label><input type="password" class="form-control" id="pwNew" minlength="8" autocomplete="new-password" placeholder="8 أحرف على الأقل"></div>
+          <div class="mb-1"><label class="form-label">تأكيد كلمة المرور</label><input type="password" class="form-control" id="pwNew2" autocomplete="new-password"></div>
+          <small class="text-muted">سيتم تحديث كلمة المرور لحسابك.</small>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-sm btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+          <button class="btn btn-sm lu-btn lu-btn-primary" id="savePw"><i class="bi bi-key-fill ms-1"></i> حفظ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ورقة الطباعة -->
+  <div id="printSheet" dir="rtl" lang="ar"></div>
+
+  <!-- المكتبات -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"
+          integrity="sha384-nLoOnA/BDh8A/jxqtckg4DumuCGOBYUnNJLZdQz/zfYNp3wcjGSoWTAzgko06G/2"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+          integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+          integrity="sha384-pqL3fQw2a7lDeuWCu1k+Lu7DSdfyBO5Zo/dm+zv05hfHKd9pbd7YXax+ZGo0a2BL"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"
+          integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- وحدات النظام -->
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/submissions.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/colleges.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

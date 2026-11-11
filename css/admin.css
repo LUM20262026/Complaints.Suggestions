@@ -1,0 +1,374 @@
+/* ============================================================================
+   admin.css — تنسيق لوحة الإدارة (admin.html)
+   نظام الشكاوى والمقترحات — جامعة اللوتس
+============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   تسجيل الدخول
+--------------------------------------------------------------------------- */
+.lu-login-wrap {
+  position: relative; z-index: 2;
+  min-height: 100vh;
+  display: grid; place-items: center;
+  padding: 1.2rem;
+}
+.lu-login-card { width: 100%; max-width: 440px; }
+.lu-login-logo {
+  width: 74px; height: 74px; border-radius: 18px;
+  margin: -60px auto 0.9rem; display: block;
+  background: var(--lu-card-solid);
+  border: 2px solid var(--lu-border-strong);
+  box-shadow: var(--lu-shadow); padding: 8px;
+}
+.lu-login-note {
+  font-size: 0.82rem; color: var(--lu-text-muted);
+  text-align: center; margin-top: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+   الهيكل العام: Sidebar + Topbar + Main
+--------------------------------------------------------------------------- */
+.lu-shell { display: flex; min-height: 100vh; }
+
+.lu-sidebar {
+  position: fixed; inset-block: 0;
+  right: 0; width: 272px; z-index: 1035;
+  background: var(--lu-sidebar);
+  border-left: 1px solid var(--lu-border);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  display: flex; flex-direction: column;
+  transition: transform 0.28s ease, background 0.35s ease;
+}
+.lu-sidebar-brand {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 1.05rem 1.15rem;
+  border-bottom: 1px solid var(--lu-border);
+}
+.lu-sidebar-brand img { width: 44px; height: 44px; border-radius: 12px; background: var(--lu-card-solid); padding: 4px; }
+.lu-sidebar-brand .t { font-weight: 800; font-size: 0.98rem; color: var(--lu-text); line-height: 1.25; }
+.lu-sidebar-brand .s { font-size: 0.72rem; color: var(--lu-text-muted); }
+
+.lu-sidebar-nav { flex: 1; overflow-y: auto; padding: 0.7rem 0.65rem 1.2rem; }
+.lu-nav-label {
+  font-size: 0.68rem; letter-spacing: 1px; color: var(--lu-text-muted);
+  padding: 0.9rem 0.75rem 0.35rem; font-weight: 700;
+}
+.lu-nav-item {
+  display: flex; align-items: center; gap: 0.65rem;
+  width: 100%; padding: 0.62rem 0.8rem; border: 0;
+  border-radius: 11px; background: transparent;
+  color: var(--lu-text); font-weight: 600; font-size: 0.92rem;
+  text-align: right; transition: background 0.18s ease, color 0.18s ease;
+  cursor: pointer;
+}
+.lu-nav-item:hover { background: var(--lu-soft); }
+.lu-nav-item.active {
+  background: linear-gradient(100deg, color-mix(in srgb, var(--lu-primary) 17%, transparent), transparent);
+  color: color-mix(in srgb, var(--lu-primary) 75%, var(--lu-text));
+  font-weight: 800;
+}
+.lu-nav-item .bi { font-size: 1.02rem; width: 20px; text-align: center; color: var(--lu-text-muted); }
+.lu-nav-item.active .bi { color: var(--lu-primary); }
+.lu-nav-item .lu-live-dot {
+  margin-inline-start: auto;
+  min-width: 21px; height: 21px; padding: 0 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800; color: #fff;
+  border-radius: 999px; background: var(--lu-danger);
+}
+.lu-nav-item.logout-link { color: #DC2626; margin-top: 1rem; }
+.lu-nav-item.logout-link .bi { color: #DC2626; }
+
+.lu-main-area { flex: 1; margin-right: 272px; min-width: 0; display: flex; flex-direction: column; }
+
+.lu-topbar {
+  position: sticky; top: 0; z-index: 1030;
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.65rem 1.1rem;
+  background: var(--lu-topbar);
+  border-bottom: 1px solid var(--lu-border);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.lu-topbar .page-title { font-weight: 800; font-size: 1.05rem; color: var(--lu-text); margin: 0; }
+.lu-icon-btn {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: inline-grid; place-items: center;
+  border: 1px solid var(--lu-border-strong);
+  background: var(--lu-card); color: var(--lu-text);
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+.lu-icon-btn:hover { transform: translateY(-2px); box-shadow: var(--lu-shadow); }
+.lu-icon-btn .lu-badge-dot {
+  position: absolute; top: -5px; left: -5px;
+  min-width: 20px; height: 20px; padding: 0 5px;
+  background: var(--lu-danger); color: #fff;
+  border-radius: 999px; font-size: 0.7rem; font-weight: 800;
+  display: inline-grid; place-items: center;
+  border: 2px solid var(--lu-card-solid);
+}
+.lu-user-chip {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  padding: 0.3rem 0.7rem; border-radius: 999px;
+  background: var(--lu-soft2); border: 1px solid var(--lu-border);
+}
+.lu-user-chip .avatar {
+  width: 30px; height: 30px; border-radius: 10px;
+  background: var(--lu-primary); color: #fff;
+  display: grid; place-items: center; font-weight: 800; font-size: 0.9rem;
+}
+.lu-user-chip .n { font-weight: 700; font-size: 0.85rem; color: var(--lu-text); }
+.lu-user-chip .r { font-size: 0.66rem; color: var(--lu-text-muted); font-weight: 700; }
+
+.lu-content { flex: 1; padding: 1.4rem 1.5rem 2.5rem; }
+
+/* ---------------------------------------------------------------------------
+   الشاشات المتبدلة داخل المحتوى (Sections)
+--------------------------------------------------------------------------- */
+.lu-section { display: none; }
+.lu-section.active { display: block; animation: fadeUp 0.35s ease both; }
+
+.lu-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1.1rem;
+}
+.lu-section-head h2 { font-size: 1.18rem; font-weight: 800; margin: 0; color: var(--lu-text); }
+
+/* ---------------------------------------------------------------------------
+   بطاقات الإحصائيات
+--------------------------------------------------------------------------- */
+.lu-kpi {
+  position: relative; overflow: hidden;
+  border-radius: var(--lu-radius-lg);
+  padding: 1.05rem 1.15rem;
+  background: var(--lu-card);
+  border: 1px solid var(--lu-border);
+  box-shadow: var(--lu-shadow);
+  -webkit-backdrop-filter: blur(var(--lu-blur)); backdrop-filter: blur(var(--lu-blur));
+  transition: transform 0.17s ease, box-shadow 0.22s ease;
+  cursor: pointer; text-align: right; width: 100%;
+}
+.lu-kpi:hover { transform: translateY(-4px); box-shadow: var(--lu-shadow-lg); }
+.lu-kpi::after {
+  content: ''; position: absolute; inset-block: 0; inset-inline-start: 0;
+  width: 5px; border-radius: 6px; background: var(--kpi-color, var(--lu-primary));
+  opacity: 0.85;
+}
+.lu-kpi .k-ic {
+  width: 46px; height: 46px; border-radius: 13px;
+  display: grid; place-items: center; font-size: 1.25rem; color: #fff;
+  background: var(--kpi-color, var(--lu-primary));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--kpi-color, var(--lu-primary)) 38%, transparent);
+}
+.lu-kpi .k-num { font-weight: 900; font-size: 1.55rem; color: var(--lu-text); line-height: 1.15; }
+.lu-kpi .k-t { font-size: 0.86rem; font-weight: 700; color: var(--lu-text-muted); }
+
+/* بطاقات الرسوم */
+.chart-card {
+  background: var(--lu-card); border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-lg); padding: 1.05rem 1.15rem 1.1rem;
+  box-shadow: var(--lu-shadow);
+  -webkit-backdrop-filter: blur(var(--lu-blur)); backdrop-filter: blur(var(--lu-blur));
+}
+.chart-card h6 { font-weight: 800; color: var(--lu-text); margin-bottom: 0.9rem; }
+.chart-box { position: relative; height: 250px; }
+.chart-box.tall { height: 300px; }
+
+/* شرائح نطاق الزمن */
+.lu-chip {
+  border: 1px solid var(--lu-border-strong);
+  background: var(--lu-input-bg); color: var(--lu-text);
+  border-radius: 999px; padding: 0.36rem 0.95rem;
+  font-weight: 700; font-size: 0.84rem;
+  transition: all 0.18s ease;
+}
+.lu-chip:hover { border-color: var(--lu-primary); color: var(--lu-primary); }
+.lu-chip.active {
+  background: var(--lu-primary); border-color: var(--lu-primary); color: #fff;
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--lu-primary) 36%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   الجداول
+--------------------------------------------------------------------------- */
+.lu-table-card {
+  background: var(--lu-card); border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-lg); box-shadow: var(--lu-shadow);
+  -webkit-backdrop-filter: blur(var(--lu-blur)); backdrop-filter: blur(var(--lu-blur));
+  overflow: hidden;
+}
+.lu-table-card .table { margin: 0; color: var(--lu-text); }
+[data-theme] .table { --bs-table-bg: transparent; --bs-table-color: var(--lu-text); }
+[data-theme] .table>:not(caption)>*>* { border-color: var(--lu-border); background: transparent; }
+[data-theme] .table thead th {
+  background: var(--lu-table-head);
+  font-weight: 800; font-size: 0.8rem;
+  white-space: nowrap; padding: 0.75rem 0.8rem;
+  border-bottom: 1px solid var(--lu-border-strong);
+}
+[data-theme] .table tbody td { padding: 0.68rem 0.8rem; vertical-align: middle; font-size: 0.88rem; }
+[data-theme] .table tbody tr:hover td { background: var(--lu-row-hover); }
+[data-theme] .table tbody tr { cursor: pointer; }
+
+/* الرسائل غير المقروءة + الصف المفتوح */
+.lu-unread td { font-weight: 700; background: color-mix(in srgb, var(--lu-primary) 5%, transparent); }
+.lu-opened td {
+  background: color-mix(in srgb, var(--lu-secondary) 9%, transparent);
+  box-shadow: inset 3px 0 0 var(--lu-secondary);
+}
+.lu-unread .lu-ref { color: var(--lu-text); font-weight: 900; }
+.lu-unread-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--lu-danger); margin-inline-start: 6px; vertical-align: middle;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lu-danger) 22%, transparent);
+}
+
+.lu-cell-msg {
+  max-width: 320px; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; display: block;
+}
+.lu-ref { font-weight: 800; font-size: 0.8rem; color: var(--lu-text-muted); font-variant-numeric: tabular-nums; }
+
+/* حالة فارغة */
+.lu-empty { text-align: center; padding: 3rem 1rem; color: var(--lu-text-muted); }
+.lu-empty .bi { font-size: 2.6rem; opacity: 0.5; }
+.lu-empty h6 { color: var(--lu-text); font-weight: 800; margin-top: 0.7rem; }
+
+/* أداة ترقيم الصفحات */
+.lu-grid-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--lu-border);
+  font-size: 0.85rem; color: var(--lu-text-muted);
+}
+[data-theme] .pagination .page-link {
+  color: var(--lu-text); background: transparent;
+  border-color: var(--lu-border); min-width: 36px;
+  text-align: center; border-radius: 9px !important; margin: 0 3px;
+  font-weight: 700;
+}
+[data-theme] .pagination .page-item.active .page-link {
+  background: var(--lu-primary); border-color: var(--lu-primary); color: #fff;
+}
+[data-theme] .pagination .page-item.disabled .page-link { color: var(--lu-text-muted); }
+
+/* أزرار العمليات الصغيرة */
+.lu-act {
+  width: 32px; height: 32px; border-radius: 9px;
+  display: inline-grid; place-items: center;
+  border: 1px solid var(--lu-border-strong); background: transparent;
+  color: var(--lu-text-muted); transition: all 0.16s ease;
+}
+.lu-act:hover { color: #fff; background: var(--lu-primary); border-color: var(--lu-primary); }
+
+/* ---------------------------------------------------------------------------
+   النوافذ المنبثقة (Modals)
+--------------------------------------------------------------------------- */
+[data-theme] .modal-content {
+  background: var(--lu-card-solid); color: var(--lu-text);
+  border: 1px solid var(--lu-border-strong); border-radius: var(--lu-radius-lg);
+}
+[data-theme] .modal-header, [data-theme] .modal-footer { border-color: var(--lu-border); }
+[data-theme] .btn-close { filter: none; }
+[data-theme='dark'] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+
+.lu-detail-head { display: flex; align-items: center; flex-wrap: wrap; gap: 0.7rem; }
+.lu-kv { display: grid; grid-template-columns: 130px 1fr; gap: 0.35rem 0.9rem; font-size: 0.9rem; }
+.lu-kv .k { color: var(--lu-text-muted); font-weight: 700; }
+.lu-kv .v { color: var(--lu-text); font-weight: 600; }
+@media (max-width: 576px) { .lu-kv { grid-template-columns: 1fr; } }
+
+.lu-message-block {
+  background: var(--lu-input-bg);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius);
+  padding: 1rem; line-height: 1.95;
+  white-space: pre-wrap; word-break: break-word;
+  max-height: 260px; overflow: auto; font-size: 0.95rem;
+}
+
+.lu-card-inner {
+  background: var(--lu-input-bg);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius);
+  padding: 0.9rem;
+}
+.lu-inner-title { font-weight: 800; font-size: 0.9rem; color: var(--lu-text); margin-bottom: 0.55rem; display: flex; gap: 0.4rem; align-items: center; }
+
+/* ---------------------------------------------------------------------------
+   نموذج الطباعة (print sheet) — نص الطباعة يفرد في print.css
+--------------------------------------------------------------------------- */
+#printSheet { display: none; }
+
+/* ---------------------------------------------------------------------------
+   تجاوب على الجوال
+--------------------------------------------------------------------------- */
+.lu-menu-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(6, 10, 25, 0.55);
+  z-index: 1032; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+@media (max-width: 991.98px) {
+  .lu-main-area { margin-right: 0; }
+  .lu-sidebar { transform: translateX(100%); box-shadow: var(--lu-shadow-lg); }
+  body.lu-nav-open .lu-sidebar { transform: translateX(0); }
+  body.lu-nav-open .lu-menu-backdrop { opacity: 1; pointer-events: auto; }
+  .lu-content { padding: 1rem 0.8rem 2.4rem; }
+  .lu-topbar { padding: 0.55rem 0.75rem; gap: 0.5rem; }
+  .lu-topbar .page-title { font-size: 0.98rem; }
+  .lu-icon-btn { width: 36px; height: 36px; border-radius: 10px; }
+  .lu-user-chip { padding: 0.22rem 0.5rem; }
+  .lu-user-chip .avatar { width: 26px; height: 26px; border-radius: 8px; }
+  .lu-section-head h2 { font-size: 1.02rem; }
+  .chart-box { height: 210px; }
+  .chart-box.tall { height: 240px; }
+  .lu-cell-msg { max-width: 190px; }
+  .lu-kpi { padding: 0.85rem 0.9rem; }
+  .lu-kpi .k-ic { width: 38px; height: 38px; font-size: 1.05rem; }
+  .lu-kpi .k-num { font-size: 1.25rem; }
+  .lu-kpi .k-t { font-size: 0.78rem; }
+  /* النوافذ على الجوال: بملء الشاشة تقريباً */
+  .modal-dialog { margin: 0.5rem; max-width: calc(100% - 1rem); }
+  .modal-dialog.modal-lg { max-width: calc(100% - 1rem); }
+  .modal-dialog-centered { min-height: calc(100% - 1rem); }
+  .modal-body { padding: 1rem; }
+  .modal-footer { flex-wrap: wrap; gap: 0.4rem; }
+  .modal-footer .btn { flex: 1 1 auto; }
+  .lu-grid-footer { flex-direction: column; align-items: stretch; text-align: center; }
+  .lu-grid-footer .pagination { justify-content: center; }
+  .lu-detail-head h5 { font-size: 1rem; }
+  .lu-message-block { max-height: 200px; font-size: 0.9rem; }
+}
+@media (max-width: 575.98px) {
+  .lu-content { padding: 0.85rem 0.6rem 2rem; }
+  .lu-section-head { gap: 0.5rem; }
+  .lu-chip { padding: 0.3rem 0.7rem; font-size: 0.78rem; }
+  .lu-table-card { border-radius: var(--lu-radius); }
+  [data-theme] .table tbody td { padding: 0.55rem 0.55rem; font-size: 0.8rem; }
+  .lu-act { width: 28px; height: 28px; border-radius: 8px; }
+  .lu-ref { font-size: 0.72rem; }
+  .lu-empty { padding: 2rem 0.6rem; }
+  .lu-kpi { padding: 0.7rem 0.75rem; }
+  .lu-kpi .k-num { font-size: 1.1rem; }
+  .lu-kpi .k-t { font-size: 0.72rem; }
+  .chart-box { height: 180px; }
+  .lu-loading { padding: 1.4rem; font-size: 0.85rem; }
+  .lu-nav-label { padding: 0.7rem 0.65rem 0.3rem; }
+  .lu-nav-item { padding: 0.55rem 0.7rem; font-size: 0.88rem; }
+}
+@media (min-width: 992px) {
+  .lu-menu-btn { display: none; }
+}
+
+/* مؤشر تحميل صغير */
+.lu-loading { display: flex; align-items: center; justify-content: center; gap: 0.7rem; padding: 2.2rem; color: var(--lu-text-muted); font-weight: 700; }
+
+/* بطاقة نص مختصر في لوحة التقارير */
+.lu-mini-kpi {
+  border-radius: 14px; padding: 0.65rem 1rem;
+  background: var(--lu-input-bg); border: 1px solid var(--lu-border);
+  display: flex; align-items: center; gap: 0.6rem;
+  font-weight: 800; color: var(--lu-text); font-size: 0.9rem;
+}

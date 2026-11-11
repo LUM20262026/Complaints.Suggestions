@@ -1,0 +1,238 @@
+/* ============================================================================
+   themes.css — نظام الألوان للوضع النهاري والداكن (Glassmorphism)
+   نظام الشكاوى والمقترحات — جامعة اللوتس
+   المتغيرات --lu-* تُددّث من لوحة الإدارة في وقت التشغيل بجسم لون الهوية
+============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   جذر النظام — المتغيرات المشتركة
+--------------------------------------------------------------------------- */
+:root {
+  /* الهوية البصرية القابلة للتعديل من لوحة الإدارة (تُطبق في وقت التشغيل) */
+  --lu-primary: #1E7A5B;
+  --lu-secondary: #7A5FB5;
+
+  --lu-radius: 14px;
+  --lu-radius-lg: 20px;
+  --lu-shadow: 0 10px 34px rgba(12, 24, 64, 0.10);
+  --lu-shadow-lg: 0 18px 50px rgba(12, 24, 64, 0.16);
+  --lu-blur: 14px;
+
+  --lu-info: #3B82F6;
+  --lu-warn: #F59E0B;
+  --lu-danger: #EF4444;
+  --lu-success: #10B981;
+}
+
+/* ---------------------------------------------------------------------------
+   الوضع النهاري (الفترت البيضاء والهواء)
+--------------------------------------------------------------------------- */
+[data-theme='light'] {
+  --lu-bg-1: #EEF4F7;
+  --lu-bg-2: #F8FAFC;
+  --lu-blob-1: rgba(30, 122, 91, 0.14);
+  --lu-blob-2: rgba(122, 95, 181, 0.13);
+  --lu-blob-3: rgba(59, 130, 246, 0.10);
+  --lu-card: rgba(255, 255, 255, 0.74);
+  --lu-card-solid: #FFFFFF;
+  --lu-sidebar: rgba(255, 255, 255, 0.82);
+  --lu-topbar: rgba(255, 255, 255, 0.66);
+  --lu-border: rgba(18, 38, 64, 0.10);
+  --lu-border-strong: rgba(18, 38, 64, 0.16);
+  --lu-text: #16233A;
+  --lu-text-muted: #5A6B85;
+  --lu-input-bg: rgba(255, 255, 255, 0.85);
+  --lu-table-head: rgba(224, 236, 242, 0.66);
+  --lu-row-hover: rgba(30, 122, 91, 0.055);
+  --lu-soft: rgba(30, 122, 91, 0.07);
+  --lu-soft2: rgba(122, 95, 181, 0.07);
+
+  /* توافق بوتستراب */
+  --bs-body-bg: #F1F5F9;
+  --bs-body-color: #16233A;
+  --bs-border-color: rgba(18, 38, 64, 0.12);
+  --bs-secondary-color: #516180;
+  --bs-emphasis-color: #16233A;
+}
+
+/* ---------------------------------------------------------------------------
+   الوضع الداكن (خلفيات كحلية اتقنية)
+--------------------------------------------------------------------------- */
+[data-theme='dark'] {
+  --lu-bg-1: #070C1F;
+  --lu-bg-2: #0B1230;
+  --lu-blob-1: rgba(30, 122, 91, 0.17);
+  --lu-blob-2: rgba(122, 95, 181, 0.18);
+  --lu-blob-3: rgba(59, 130, 246, 0.13);
+  --lu-card: rgba(17, 26, 58, 0.72);
+  --lu-card-solid: #131C3E;
+  --lu-sidebar: rgba(13, 20, 48, 0.88);
+  --lu-topbar: rgba(13, 20, 48, 0.72);
+  --lu-border: rgba(255, 255, 255, 0.09);
+  --lu-border-strong: rgba(255, 255, 255, 0.16);
+  --lu-text: #E8EEFB;
+  --lu-text-muted: #9FB0CC;
+  --lu-input-bg: rgba(255, 255, 255, 0.06);
+  --lu-table-head: rgba(255, 255, 255, 0.05);
+  --lu-row-hover: rgba(30, 122, 91, 0.12);
+  --lu-soft: rgba(30, 122, 91, 0.15);
+  --lu-soft2: rgba(122, 95, 181, 0.14);
+  --lu-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+  --lu-shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.55);
+
+  /* توافق بوتستراب */
+  --bs-body-bg: #0B1230;
+  --bs-body-color: #E8EEFB;
+  --bs-border-color: rgba(255, 255, 255, 0.11);
+  --bs-secondary-color: rgba(232, 238, 251, 0.66);
+  --bs-emphasis-color: #E8EEFB;
+  --bs-form-control-bg: rgba(255, 255, 255, 0.06);
+}
+
+/* ---------------------------------------------------------------------------
+   خلفية الجسم — تدرجات لطيفة + كتل ضوء ناعمة
+--------------------------------------------------------------------------- */
+.lu-body {
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--lu-bg-1) 0%, var(--lu-bg-2) 100%);
+  color: var(--lu-text);
+  transition: background 0.35s ease, color 0.35s ease;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.lu-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  transition: background 0.35s ease;
+}
+.lu-blob.a { width: 420px; height: 420px; top: -140px; right: -120px; background: var(--lu-blob-1); }
+.lu-blob.b { width: 380px; height: 380px; bottom: -120px; left: -110px; background: var(--lu-blob-2); }
+.lu-blob.c { width: 300px; height: 300px; top: 40%; left: 45%; background: var(--lu-blob-3); }
+
+/* ---------------------------------------------------------------------------
+   البطاقات الزجاجية
+--------------------------------------------------------------------------- */
+.card-glass {
+  background: var(--lu-card);
+  border: 1px solid var(--lu-border);
+  border-radius: var(--lu-radius-lg);
+  box-shadow: var(--lu-shadow);
+  -webkit-backdrop-filter: blur(var(--lu-blur));
+  backdrop-filter: blur(var(--lu-blur));
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.3s ease;
+}
+
+/* بطاقة كبيرة بمساحة داخلية مريحة */
+.card-glass-lg {
+  padding: 1.75rem;
+}
+
+/* ---------------------------------------------------------------------------
+   الحقول والنماذج
+--------------------------------------------------------------------------- */
+[data-theme] .form-control,
+[data-theme] .form-select {
+  background-color: var(--lu-input-bg);
+  border-color: var(--lu-border-strong);
+  color: var(--lu-text);
+  border-radius: var(--lu-radius);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+}
+[data-theme] .form-control:focus,
+[data-theme] .form-select:focus {
+  background-color: var(--lu-input-bg);
+  color: var(--lu-text);
+  border-color: var(--lu-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lu-primary) 22%, transparent);
+}
+[data-theme] .form-control::placeholder { color: color-mix(in srgb, var(--lu-text-muted) 85%, transparent); }
+[data-theme] .form-select option { color: #16233A; background: #fff; }
+[data-theme='dark'] .form-select option { color: #E8EEFB; background: #131C3E; }
+[data-theme] .input-group-text { background: var(--lu-soft); border-color: var(--lu-border-strong); color: var(--lu-text-muted); }
+.form-label { font-weight: 600; color: var(--lu-text); }
+[data-theme] .form-control.is-invalid,
+[data-theme] .form-select.is-invalid { border-color: var(--lu-danger); }
+
+/* مفتاح التبديل العام */
+.lu-theme-btn {
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--lu-card);
+  border: 1px solid var(--lu-border-strong);
+  color: var(--lu-text);
+  backdrop-filter: blur(var(--lu-blur));
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+.lu-theme-btn:hover { transform: translateY(-2px); box-shadow: var(--lu-shadow); }
+
+/* شارات الحالة */
+.lu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   تحفيز الطفت (Hover) المستخدم في الأزرار
+--------------------------------------------------------------------------- */
+.lu-btn {
+  border: 0;
+  border-radius: var(--lu-radius);
+  font-weight: 700;
+  transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.lu-btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+.lu-btn:active { transform: translateY(0); }
+.lu-btn-primary {
+  background: linear-gradient(135deg, var(--lu-primary), color-mix(in srgb, var(--lu-primary) 70%, #000));
+  color: #fff;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--lu-primary) 40%, transparent);
+}
+.lu-btn-primary:hover { color: #fff; }
+.lu-btn-secondary {
+  background: linear-gradient(135deg, var(--lu-secondary), color-mix(in srgb, var(--lu-secondary) 70%, #000));
+  color: #fff;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--lu-secondary) 40%, transparent);
+}
+.lu-btn-secondary:hover { color: #fff; }
+
+/* تحسين من لطيف للأيقونات */
+.lu-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+/* عداد أحرف textarea */
+.lu-char-counter {
+  font-size: 0.8rem;
+  color: var(--lu-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* تحسين نوافذ SweetAlert2 في الظلام */
+[data-theme='dark'] .swal2-popup { background: var(--lu-card-solid); color: var(--lu-text); }
+[data-theme='dark'] .swal2-title, [data-theme='dark'] .swal2-html-container { color: var(--lu-text); }
+
+::selection { background: color-mix(in srgb, var(--lu-primary) 30%, transparent); }
+
+/* شريط تمرير أنيق */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--lu-border-strong); border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="منصة الشكاوى والمقترحات لجامعة اللوتس — أرسل شكواك أو مقترحك بسرية تامة وسيصل مباشرة إلى الإدارة المختصة.">
+  <title>منصة الشكاوى والمقترحات | جامعة اللوتس</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/lotus-logo.svg">
+
+  <!-- الخطوط: Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5.3 RTL + Icons (مثبّت الإصدار + بصمة تحقق SRI) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet"
+        integrity="sha384-dpuaG1suU0eT09tx5plTaGMLBsfDLzUCCUXOY2j/LSvXYuG6Bqs43ALlhIqAJVRb" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"
+        integrity="sha384-XGjxtQfXaH2tnPFa9x+ruJTuLE3Aa6LhHSWRr1XeTyhezb4abCG4ccI5AkVDxqC+" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- SweetAlert2 -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" rel="stylesheet"
+        integrity="sha384-dCW5imOdApH6OwpFau8cZNKjqVbJYnCA5q+8YsMYP3XwXKsV6Jfz1u6MZLnXaBsS" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- تنسيقات النظام -->
+  <link href="css/themes.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/print.css" rel="stylesheet">
+</head>
+<body class="lu-body">
+
+  <!-- كتل الخلفية الزخرفية -->
+  <div class="lu-blob a" aria-hidden="true"></div>
+  <div class="lu-blob b" aria-hidden="true"></div>
+  <div class="lu-blob c" aria-hidden="true"></div>
+
+  <!-- شريط انقطاع الاتصال -->
+  <div id="offlineBox" class="lu-offline-bar d-none" role="alert">
+    <i class="bi bi-wifi-off"></i>
+    <span>لا يوجد اتصال بالإنترنت — ستعمل المنصة تلقائياً فور رجوع الاتصال</span>
+  </div>
+
+  <!-- زر تبديل الوضع الداكن/النهاري -->
+  <div class="lu-theme-float">
+    <button type="button" class="btn lu-theme-btn" data-theme-toggle aria-label="تبديل الوضع الداكن والنهاري">
+      <i class="lu-theme-icon bi bi-moon-stars-fill"></i>
+      <span class="lu-theme-label">داكن</span>
+    </button>
+  </div>
+
+  <!-- =======================================================================
+       الرأس: الهوية البصرية (قابلة للتحكم كلياً من لوحة الإدارة)
+  ==================================================================== -->
+  <header class="lu-hero container fade-up">
+    <img id="brandLogo" class="brand-logo lu-logo-fallback" src="assets/images/lotus-logo.svg" alt="شعار جامعة اللوتس" width="88" height="88">
+    <h1 id="uniName">جامعة اللوتس</h1>
+    <div><span id="pageTitle" class="lu-title-sub">منصة الشكاوى والمقترحات</span></div>
+    <p id="welcomeText" class="lu-welcome">أهلاً بك — صوتك مسموع ومهم</p>
+    <p id="descText" class="lu-desc">منصة رسمية مخصصة لاستقبال شكاوى ومقترحات الطلاب وأعضاء هيئة التدريس والموظفين. أرسل رسالتك بسرية تامة وستصل مباشرة إلى الإدارة المختصة.</p>
+  </header>
+
+  <!-- =======================================================================
+       النموذج الرئيسي
+  ==================================================================== -->
+  <main class="lu-main">
+    <div class="container">
+      <div class="card-glass lu-form-card fade-up">
+        <div class="card-glass-lg">
+
+          <div class="lu-form-title">
+            <i class="bi bi-envelope-paper-heart-fill"></i>
+            <span>شاركنا رأيك أو مشكلتك</span>
+          </div>
+
+          <!-- تنبيه: النظام غير جاهز -->
+          <div id="initBox" class="lu-init d-none" role="alert">
+            <i class="bi bi-database-exclamation"></i>
+            <p class="fw-bold mb-1">النظام غير جاهز حالياً</p>
+            <small>يرجى المحاولة لاحقاً.</small>
+          </div>
+
+          <!-- تنبيه: إيقاف الاستقبال من الإدارة -->
+          <div id="closedBox" class="lu-closed d-none" role="alert">
+            <i class="bi bi-pause-circle"></i>
+            <p id="closedMsg">تم إيقاف استقبال الرسائل مؤقتاً.</p>
+          </div>
+
+          <!-- النموذج -->
+          <form id="luForm" novalidate>
+            <div id="formBody">
+
+              <div class="row g-3">
+                <!-- الاسم (اختياري حسب الإعدادات) -->
+                <div class="col-md-6" id="nameWrap">
+                  <label for="senderName" class="form-label">الاسم <small class="text-muted" id="nameHint">(اختياري)</small></label>
+                  <input type="text" class="form-control" id="senderName" name="sender_name" placeholder="اكتب اسمك إن رغبت" maxlength="120" autocomplete="name">
+                </div>
+
+                <!-- الكلية (من قاعدة البيانات) -->
+                <div class="col-md-6">
+                  <label for="collegeSelect" class="form-label">الكلية <span class="text-danger">*</span></label>
+                  <select class="form-select" id="collegeSelect" name="college_id" required>
+                    <option value="">— جاري التحميل... —</option>
+                  </select>
+                </div>
+
+                <!-- نوع الرسالة: بطاقتا شكوى/اقتراح -->
+                <div class="col-12">
+                  <label class="form-label d-block">نوع الرسالة <span class="text-danger">*</span></label>
+                  <div class="lu-type-grid" role="radiogroup" aria-label="نوع الرسالة">
+
+                    <label class="lu-type-card is-complaint" id="cardComplaint">
+                      <input type="radio" name="msgType" id="typeComplaint" value="complaint">
+                      <span class="type-ic"><i class="bi bi-exclamation-octagon-fill"></i></span>
+                      <div>
+                        <div class="type-t">شكوى</div>
+                        <div class="type-d">مشكلة أو تظلم يحتاج تناولاً من الإدارة</div>
+                      </div>
+                    </label>
+
+                    <label class="lu-type-card is-suggestion" id="cardSuggestion">
+                      <input type="radio" name="msgType" id="typeSuggestion" value="suggestion">
+                      <span class="type-ic"><i class="bi bi-lightbulb-fill"></i></span>
+                      <div>
+                        <div class="type-t">اقتراح</div>
+                        <div class="type-d">فكرة لتطوير البيئة الجامعية</div>
+                      </div>
+                    </label>
+
+                  </div>
+                </div>
+
+                <!-- نص الرسالة -->
+                <div class="col-12">
+                  <label for="messageText" class="form-label">نص الرسالة <span class="text-danger">*</span></label>
+                  <textarea class="form-control lu-textarea" id="messageText" name="message" rows="6"
+                            placeholder="اكتب تفاصيل رسالتك هنا..." maxlength="2000"></textarea>
+                  <div class="d-flex justify-content-between align-items-center mt-1">
+                    <small class="text-muted">رسالتك تصلكم بسرية تامة ولا تُعرض لأي طرف خارج الإدارة المختصة</small>
+                    <small class="lu-char-counter" id="charCounter">0 / 2000</small>
+                  </div>
+                </div>
+
+                <!-- حقل الفخ الأمني (غير مرئي للبشر — يكشف الروبوتات) -->
+                <input type="text" name="website" value="" autocomplete="off" tabindex="-1" aria-hidden="true" class="lu-hp">
+
+                <!-- زر الإرسال -->
+                <div class="col-12">
+                  <button type="submit" class="btn lu-btn lu-btn-primary lu-submit" id="submitBtn">
+                    <i class="bi bi-send-fill ms-1"></i>
+                    <span>إرسال الرسالة</span>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+
+      <!-- متابعة رسالة -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-lg-8">
+          <div class="lu-card lu-glass lu-form-shell">
+            <div class="p-4 p-md-5">
+              <h3 class="h5 mb-2" style="font-weight:800"><i class="bi bi-search ms-1" style="color:var(--lu-primary)"></i> متابعة رسالة</h3>
+              <p class="text-muted mb-3" style="font-size:0.92rem">أدخل الرقم المرجعي للاطلاع على حالة الرسالة والرد (إن وُجد).</p>
+              <div class="row g-2 align-items-end">
+                <div class="col-sm-8">
+                  <label for="trackRef" class="form-label">الرقم المرجعي</label>
+                  <input type="text" class="form-control" id="trackRef" placeholder="مثال: LU-2026-00001" dir="ltr" style="text-align:right">
+                </div>
+                <div class="col-sm-4">
+                  <button type="button" class="btn lu-btn lu-btn-secondary w-100" id="trackBtn"><i class="bi bi-search ms-1"></i> متابعة</button>
+                </div>
+              </div>
+              <div id="trackResult" class="mt-3 d-none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- =======================================================================
+       التذييل (نصه من لوحة الإدارة)
+  ==================================================================== -->
+  <footer class="lu-footer">
+    <div class="container">
+      <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+        <i class="bi bi-c-circle"></i>
+        <span id="footerText">جميع الحقوق محفوظة لجامعة اللوتس</span>
+      </div>
+      <small class="text-muted"><b>Lotus University</b> — منصة الشكاوى والمقترحات</small>
+    </div>
+  </footer>
+
+  <!-- حاوية ملفات أدوات + منطق الواجهة -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"
+          integrity="sha384-nLoOnA/BDh8A/jxqtckg4DumuCGOBYUnNJLZdQz/zfYNp3wcjGSoWTAzgko06G/2"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"
+          integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="js/supabase.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/public-form.js"></script>
+</body>
+</html>

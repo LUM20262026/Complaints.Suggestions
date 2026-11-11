@@ -1,0 +1,230 @@
+/* ============================================================================
+   style.css — تنسيق الصفحة العامة (index.html)
+   نظام الشكاوى والمقترحات — جامعة اللوتس
+============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   الرأس (الهوية والعنوان والترحيب)
+--------------------------------------------------------------------------- */
+.lu-hero { position: relative; z-index: 2; padding: 3rem 0 1.4rem; text-align: center; }
+
+.brand-logo {
+  width: 88px;
+  height: 88px;
+  border-radius: 22px;
+  object-fit: cover;
+  box-shadow: var(--lu-shadow);
+  border: 2px solid var(--lu-border-strong);
+  background: #fff;
+  padding: 6px;
+}
+.brand-logo.lu-logo-fallback { background: var(--lu-card-solid); }
+
+.lu-hero h1 {
+  margin: 0.9rem 0 0.35rem;
+  font-weight: 800;
+  font-size: clamp(1.55rem, 3.2vw, 2.15rem);
+  color: var(--lu-text);
+  letter-spacing: 0.2px;
+}
+
+.lu-hero .lu-title-sub {
+  font-weight: 700;
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  display: inline-block;
+  padding: 0.35rem 1.15rem;
+  border-radius: 999px;
+  background: linear-gradient(120deg, color-mix(in srgb, var(--lu-primary) 14%, transparent),
+                                       color-mix(in srgb, var(--lu-secondary) 14%, transparent));
+  border: 1px solid var(--lu-border);
+  color: var(--lu-text);
+  margin-bottom: 1rem;
+}
+
+.lu-welcome {
+  max-width: 620px;
+  margin: 0 auto 0.4rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--lu-primary) 82%, var(--lu-text));
+  font-size: 1.04rem;
+}
+.lu-desc {
+  max-width: 640px;
+  margin: 0 auto;
+  color: var(--lu-text-muted);
+  font-size: 0.96rem;
+  line-height: 1.9;
+}
+
+.lu-theme-float { position: absolute; top: 1.1rem; left: 1.1rem; z-index: 5; }
+
+/* ---------------------------------------------------------------------------
+   النموذج
+--------------------------------------------------------------------------- */
+.lu-main { position: relative; z-index: 2; padding-bottom: 2.5rem; }
+
+.lu-form-card { max-width: 860px; margin: 0 auto; }
+.lu-form-card .card-glass-lg { padding: clamp(1.2rem, 3vw, 2.2rem); }
+
+.lu-form-title {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-weight: 800; font-size: 1.22rem; color: var(--lu-text); margin-bottom: 1.4rem;
+}
+.lu-form-title .bi { color: var(--lu-primary); }
+
+/* بطاقتا نوع الرسالة */
+.lu-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+
+.lu-type-card {
+  position: relative;
+  display: flex; align-items: center; gap: 0.95rem;
+  padding: 1.05rem 1.15rem;
+  border-radius: var(--lu-radius-lg);
+  background: var(--lu-input-bg);
+  border: 2px solid var(--lu-border);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.25s ease, transform 0.16s ease, box-shadow 0.25s ease;
+  user-select: none;
+}
+.lu-type-card:hover { transform: translateY(-2px); box-shadow: var(--lu-shadow); }
+.lu-type-card input { position: absolute; opacity: 0; pointer-events: none; }
+.lu-type-card .type-ic {
+  width: 46px; height: 46px; border-radius: 13px;
+  display: grid; place-items: center;
+  font-size: 1.32rem; color: #fff; flex-shrink: 0;
+}
+.lu-type-card .type-t { font-weight: 800; font-size: 1.06rem; color: var(--lu-text); }
+.lu-type-card .type-d { font-size: 0.8rem; color: var(--lu-text-muted); margin-top: 2px; }
+
+.lu-type-card.is-complaint .type-ic { background: linear-gradient(135deg, #EF4444, #B91C1C); }
+.lu-type-card.is-suggestion .type-ic { background: linear-gradient(135deg, #3B82F6, #1D4ED8); }
+
+.lu-type-card.selected { border-color: currentColor; }
+.lu-type-card.is-complaint.selected {
+  background: color-mix(in srgb, #EF4444 10%, var(--lu-card-solid) 86%);
+  border-color: #EF4444;
+  box-shadow: 0 10px 28px color-mix(in srgb, #EF4444 24%, transparent);
+}
+.lu-type-card.is-suggestion.selected {
+  background: color-mix(in srgb, #3B82F6 10%, var(--lu-card-solid) 86%);
+  border-color: #3B82F6;
+  box-shadow: 0 10px 28px color-mix(in srgb, #3B82F6 24%, transparent);
+}
+.lu-type-card input:focus-visible ~ .type-t::before {
+  content: ''; position: absolute; inset: -2px; border-radius: inherit;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--lu-primary) 35%, transparent);
+}
+
+/* مساحة النص — دقة أعلى من textarea.form-control في بوتستراب لضمان الارتفاع الأدنى */
+textarea.lu-textarea {
+  min-height: 186px;
+  line-height: 1.9;
+  font-size: 1rem;
+  resize: vertical;
+}
+@media (max-width: 576px) {
+  .lu-type-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------------------
+   تجاوب الصفحة العامة مع الجوال
+--------------------------------------------------------------------------- */
+@media (max-width: 991.98px) {
+  .lu-hero { padding: 1.8rem 0 1rem; }
+  .brand-logo { width: 72px; height: 72px; border-radius: 18px; }
+  .lu-hero h1 { font-size: clamp(1.35rem, 4.5vw, 1.8rem); }
+  .lu-hero .lu-title-sub { font-size: clamp(0.95rem, 3vw, 1.1rem); padding: 0.3rem 0.9rem; }
+  .lu-welcome { font-size: 0.98rem; }
+  .lu-desc { font-size: 0.9rem; line-height: 1.85; }
+  .lu-form-card { margin: 0; }
+  .lu-form-card .card-glass-lg { padding: clamp(1rem, 4vw, 1.6rem); border-radius: var(--lu-radius-lg); }
+  textarea.lu-textarea { min-height: 150px; font-size: 0.95rem; }
+  .lu-submit { padding: 0.85rem 1rem; font-size: 1.02rem; }
+  .lu-footer { padding: 1.2rem 0; }
+  .lu-footer .d-flex { flex-direction: column; gap: 0.5rem; }
+  .lu-theme-float { top: 0.8rem; left: 0.8rem; }
+}
+@media (max-width: 575.98px) {
+  .container, .container-fluid { padding-inline: 0.75rem; }
+  .lu-hero { padding: 1.4rem 0 0.8rem; }
+  .brand-logo { width: 62px; height: 62px; border-radius: 15px; }
+  .lu-hero h1 { font-size: 1.28rem; }
+  .lu-hero .lu-title-sub { font-size: 0.92rem; }
+  .lu-welcome { font-size: 0.92rem; }
+  .lu-desc { font-size: 0.86rem; }
+  .lu-form-card .card-glass-lg { padding: 1rem; }
+  textarea.lu-textarea { min-height: 130px; }
+  .lu-submit { font-size: 0.98rem; }
+  .lu-char-counter { font-size: 0.75rem; }
+  .lu-footer small { font-size: 0.75rem; }
+}
+
+/* زر الإرسال */
+.lu-submit {
+  width: 100%;
+  padding: 0.95rem 1.2rem;
+  font-size: 1.12rem;
+  font-weight: 800;
+}
+
+/* حقل الفخ الأمني — غير مرئي للبشر يكشف روبوتات السبام */
+.lu-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* صندوق إيقاف الاستقبال */
+.lu-closed {
+  text-align: center;
+  padding: 2.4rem 1rem;
+}
+.lu-closed .bi { font-size: 2.6rem; color: var(--lu-warn); }
+.lu-closed p { font-size: 1.06rem; color: var(--lu-text); margin-top: 0.8rem; font-weight: 700; }
+
+/* حالة انتظام قاعدة البيانات */
+.lu-init {
+  text-align: center; padding: 1.8rem;
+  color: var(--lu-text-muted);
+}
+.lu-init .bi { font-size: 2rem; color: var(--lu-warn); }
+
+/* شريط الانقطاع */
+.lu-offline-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; gap: 0.5rem; align-items: center; justify-content: center;
+  background: linear-gradient(90deg, #DC2626, #EF4444);
+  color: #fff; font-weight: 700; padding: 0.55rem 1rem; font-size: 0.92rem;
+}
+
+/* ---------------------------------------------------------------------------
+   التذييل
+--------------------------------------------------------------------------- */
+.lu-footer {
+  position: relative; z-index: 2;
+  border-top: 1px solid var(--lu-border);
+  padding: 1.15rem 0 1.35rem;
+  text-align: center;
+  color: var(--lu-text-muted);
+  font-size: 0.92rem;
+}
+.lu-footer .bi-heart-fill { color: var(--lu-primary); font-size: 0.8rem; }
+.lu-footer b { color: var(--lu-text); font-weight: 800; }
+
+/* رسالة النجاح — نبض الأيقونة */
+.lu-check-pop { animation: luPop 0.55s cubic-bezier(0.2, 1.4, 0.4, 1); }
+@keyframes luPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* تحسين الظهور عند التحميل */
+.fade-up { animation: fadeUp 0.5s ease both; }
+@keyframes fadeUp {
+  from { transform: translateY(14px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

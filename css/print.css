@@ -1,0 +1,70 @@
+/* ============================================================================
+   print.css — تنسيق الطباعة الرسمي (A4) للتقارير وتفاصيل الرسائل
+   نظام الشكاوى والمقترحات — جامعة اللوتس
+   ملاحظة: محتوى الطباعة يوضع دائماً داخل #printSheet
+============================================================================ */
+
+@media screen {
+  #printSheet { display: none; }
+}
+
+@media print {
+  /* إخفاء كل شيء ما عدا ورقة الطباعة */
+  body > *:not(#printSheet) {
+    display: none !important;
+  }
+  #printSheet {
+    display: block !important;
+    width: 100%;
+    max-width: 730px;   /* عرض A4 تقريباً 794px مع هوامش */
+    margin: 0 auto;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    color: #111827;
+    background: #fff;
+  }
+
+  @page {
+    size: A4;
+    margin: 12mm 10mm 14mm 10mm;
+  }
+
+  /* ورقة الترويسة */
+  .pn-head { text-align: center; border-bottom: 3px double #0f5132; padding-bottom: 8px; margin-bottom: 10px; }
+  .pn-head .pn-logo { height: 52px; margin-bottom: 4px; }
+  .pn-head h1 { font-size: 1.35rem; font-weight: 900; color: #0f5132; margin: 0; }
+  .pn-head h2 { font-size: 1rem; font-weight: 800; color: #374151; margin: 2px 0 0; }
+  .pn-meta {
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+    font-size: 0.82rem; color: #374151; padding: 6px 0 10px;
+    border-bottom: 1px solid #d1d5db; margin-bottom: 8px;
+  }
+  .pn-meta b { color: #111827; }
+
+  /* الجدول */
+  table.pn-table {
+    width: 100%; border-collapse: collapse; font-size: 0.78rem; page-break-inside: auto;
+  }
+  table.pn-table th, table.pn-table td {
+    border: 1px solid #9CA3AF; padding: 5px 7px; text-align: right; vertical-align: top;
+  }
+  table.pn-table thead th {
+    background: #ECF2F0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    font-weight: 800; color: #0f5132; white-space: nowrap;
+  }
+  table.pn-table tbody tr { page-break-inside: avoid; page-break-after: auto; }
+
+  td.pn-msg { max-width: 220px; }
+  .pn-ellipsis { display: block; max-height: 5.5em; overflow: hidden; line-height: 1.5; }
+
+  /* توقيع أسفل التقرير */
+  .pn-foot {
+    margin-top: 14px; padding-top: 8px; border-top: 1px solid #d1d5db;
+    display: flex; justify-content: space-between; font-size: 0.8rem; color: #374151;
+  }
+  .print-only-break { page-break-before: always; }
+
+  /* عند تفاصيل رسالة مفردة */
+  .pn-single-box { border: 1px solid #9CA3AF; border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; }
+  .pn-single-box .row-l { display: flex; gap: 8px; font-size: 0.85rem; padding: 2px 0; }
+  .pn-single-box .row-l b { min-width: 110px; color: #0f5132; }
+}
