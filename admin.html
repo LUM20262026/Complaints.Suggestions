@@ -36,7 +36,7 @@
   <div id="loginView" class="lu-login-wrap">
     <div class="card-glass lu-login-card">
       <div style="padding:1.9rem 1.6rem 1.6rem">
-        <img src="assets/images/lotus-logo.svg" class="lu-login-logo" alt="شعار جامعة اللوتس" width="74" height="74">
+        <img id="loginLogo" src="assets/images/lotus-logo.svg" class="lu-login-logo" alt="شعار جامعة اللوتس" width="74" height="74">
         <h1 class="text-center" style="font-weight:800;font-size:1.25rem;color:var(--lu-text)">لوحة إدارة الشكاوى والمقترحات</h1>
         <p class="text-center" style="color:var(--lu-text-muted);font-size:0.85rem">جامعة اللوتس — دخول خاص بالمديرين المصرح لهم</p>
 
@@ -85,7 +85,7 @@
       <!-- القائمة الجانبية -->
       <aside id="sidebar" class="lu-sidebar" aria-label="القائمة الجانبية">
         <div class="lu-sidebar-brand">
-          <img src="assets/images/lotus-logo.svg" alt="الشعار">
+          <img id="sidebarLogo" src="assets/images/lotus-logo.svg" alt="الشعار">
           <div>
             <div class="t">لوحة الإدارة</div>
             <div class="s">جامعة اللوتس — نظام الشكاوى</div>
@@ -124,6 +124,7 @@
         <!-- الشريط العلوي -->
         <header class="lu-topbar">
           <button class="lu-icon-btn lu-menu-btn" id="menuBtn" aria-label="فتح القائمة"><i class="bi bi-list"></i></button>
+          <img id="topbarLogo" class="lu-topbar-logo" src="assets/images/lotus-logo.svg" alt="شعار جامعة اللوتس" width="34" height="34">
           <h2 class="page-title" id="pageTitleTop">الرئيسية</h2>
 
           <div class="ms-auto d-flex align-items-center gap-2">
@@ -843,7 +844,7 @@
           integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
-          integrity="sha384-pqL3fQw2a7lDeuWCu1k+Lu7DSdfyBO5Zo/dm+zv05hfHKd9pbd7YXax+ZGo0a2BL"
+          integrity="sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT"
           crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js"
           integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O"

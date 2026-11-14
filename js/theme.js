@@ -5,18 +5,18 @@
 
 window.LUTheme = {
   KEY: 'lu_theme',          // مفتاح اختيار المستخدم في LocalStorage
-  _default: 'light',        // الافتراضي من إعدادات الإدارة (يُحدَّث إن توفر)
+  _default: 'dark',         // الافتراضي الداكن (تُمرَّر للصفحة العامة دائماً)
 
   // تطبيق الوضع على الصفحة
   apply(theme) {
-    if (theme !== 'dark' && theme !== 'light') theme = 'light';
+    if (theme !== 'dark' && theme !== 'light') theme = 'dark';
     document.documentElement.setAttribute('data-theme', theme);
     document.dispatchEvent(new CustomEvent('lu:themechange', { detail: { theme } }));
     this._syncButtons(theme);
   },
 
   current() {
-    return document.documentElement.getAttribute('data-theme') || 'light';
+    return document.documentElement.getAttribute('data-theme') || 'dark';
   },
 
   // التبديل والتخزين (اختيار المستخدم يتقدم على الافتراضي الإداري دائماً)
@@ -26,12 +26,13 @@ window.LUTheme = {
     this.apply(next);
   },
 
-  // تشغيل النظام: يقرأ اختيار المستخدم، وإلا يستخدم الافتراضي الإداري
-  init(defaultTheme) {
+  // تشغيل النظام: forceDark = الصفحة تفتح داكنة دائماً مهما كان الاختيار المحفوظ
+  init(defaultTheme, forceDark) {
     if (defaultTheme === 'dark' || defaultTheme === 'light') this._default = defaultTheme;
+    if (forceDark) this._default = 'dark';
     let saved = null;
     try { saved = localStorage.getItem(this.KEY); } catch (e) {}
-    this.apply(saved || this._default);
+    this.apply(forceDark ? 'dark' : (saved || this._default));
 
     // ربط جميع أزرار التبديل في الصفحة (المستقبل متاح للعناصر المضافة لاحقاً)
     document.addEventListener('click', (e) => {

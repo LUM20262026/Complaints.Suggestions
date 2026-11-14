@@ -182,7 +182,7 @@ window.LUSub = (function () {
   // مصادر مكتبة Excel — كلها مثبّتة الإصدار ومحمية بصمة تحقق (SRI)
   const XLSX_SOURCES = [
     { src: 'https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js',
-      integrity: 'sha384-pqL3fQw2a7lDeuWCu1k+Lu7DSdfyBO5Zo/dm+zv05hfHKd9pbd7YXax+ZGo0a2BL' },
+      integrity: 'sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT' },
     { src: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
       integrity: 'sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw' },
     { src: 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',

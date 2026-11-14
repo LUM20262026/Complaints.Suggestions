@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="light">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,7 +115,6 @@
                       <span class="type-ic"><i class="bi bi-exclamation-octagon-fill"></i></span>
                       <div>
                         <div class="type-t">شكوى</div>
-                        <div class="type-d">مشكلة أو تظلم يحتاج تناولاً من الإدارة</div>
                       </div>
                     </label>
 
@@ -124,7 +123,6 @@
                       <span class="type-ic"><i class="bi bi-lightbulb-fill"></i></span>
                       <div>
                         <div class="type-t">اقتراح</div>
-                        <div class="type-d">فكرة لتطوير البيئة الجامعية</div>
                       </div>
                     </label>
 
@@ -136,8 +134,7 @@
                   <label for="messageText" class="form-label">نص الرسالة <span class="text-danger">*</span></label>
                   <textarea class="form-control lu-textarea" id="messageText" name="message" rows="6"
                             placeholder="اكتب تفاصيل رسالتك هنا..." maxlength="2000"></textarea>
-                  <div class="d-flex justify-content-between align-items-center mt-1">
-                    <small class="text-muted">رسالتك تصلكم بسرية تامة ولا تُعرض لأي طرف خارج الإدارة المختصة</small>
+                  <div class="d-flex justify-content-end align-items-center mt-1">
                     <small class="lu-char-counter" id="charCounter">0 / 2000</small>
                   </div>
                 </div>
@@ -160,27 +157,6 @@
         </div>
       </div>
 
-      <!-- متابعة رسالة -->
-      <div class="row justify-content-center mt-4">
-        <div class="col-lg-8">
-          <div class="lu-card lu-glass lu-form-shell">
-            <div class="p-4 p-md-5">
-              <h3 class="h5 mb-2" style="font-weight:800"><i class="bi bi-search ms-1" style="color:var(--lu-primary)"></i> متابعة رسالة</h3>
-              <p class="text-muted mb-3" style="font-size:0.92rem">أدخل الرقم المرجعي للاطلاع على حالة الرسالة والرد (إن وُجد).</p>
-              <div class="row g-2 align-items-end">
-                <div class="col-sm-8">
-                  <label for="trackRef" class="form-label">الرقم المرجعي</label>
-                  <input type="text" class="form-control" id="trackRef" placeholder="مثال: LU-2026-00001" dir="ltr" style="text-align:right">
-                </div>
-                <div class="col-sm-4">
-                  <button type="button" class="btn lu-btn lu-btn-secondary w-100" id="trackBtn"><i class="bi bi-search ms-1"></i> متابعة</button>
-                </div>
-              </div>
-              <div id="trackResult" class="mt-3 d-none"></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </main>
 

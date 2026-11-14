@@ -69,7 +69,7 @@
     require_college: true,
     message_min_length: 10,
     message_max_length: 2000,
-    default_theme: 'light',
+    default_theme: 'dark',
   };
 
   // ---------------------------------------------------------------------------
@@ -97,7 +97,8 @@
 
     applySettings();
     applyColleges();
-    LUTheme.init((state.settings && state.settings.default_theme) || 'light');
+    // الصفحة العامة تفتح في الوضع الداكن دائماً (زر التبديل يعمل داخل الجلسة)
+    LUTheme.init((state.settings && state.settings.default_theme) || 'dark', true);
   }
 
   // ---------------------------------------------------------------------------
@@ -323,8 +324,7 @@
         title: 'رسالتك وصلت',
         icon: 'success',
         html: `<div style="margin-top:.4rem">${luEscape(s.success_message || 'تم إرسال رسالتك بنجاح إلى إدارة الجامعة')}</div>` +
-          (ref ? `<div dir="ltr" style="margin-top:.7rem;font-size:1.1rem;font-weight:800;letter-spacing:.5px">${luEscape(ref)}</div>` : '') +
-          `<div class="small text-muted" style="margin-top:.35rem">احفظ هذا الرقم لمتابعة حالة رسالتك لاحقاً</div>`,
+          (ref ? `<div dir="ltr" style="margin-top:.7rem;font-size:1.1rem;font-weight:800;letter-spacing:.5px">${luEscape(ref)}</div>` : ''),
         direction: 'rtl',
         confirmButtonText: 'حسناً',
         confirmButtonColor: '#1E7A5B',
@@ -453,6 +453,16 @@
   if (trackBtn) trackBtn.addEventListener('click', trackSubmission);
   const trackRef = document.getElementById('trackRef');
   if (trackRef) trackRef.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); trackSubmission(); } });
+
+  // ضمان ظهور الشعار دائماً: لو صورة الشعار المخصصة لم تُحمَّل
+  // (رابط قديم أو انقطاع) نرجع فوراً للشعار المحلي
+  const LOGO_FALLBACK = 'assets/images/lotus-logo.svg';
+  el.brandLogo.addEventListener('error', function () {
+    if (el.brandLogo.src.indexOf(LOGO_FALLBACK) === -1) {
+      el.brandLogo.src = LOGO_FALLBACK;
+      el.brandLogo.classList.add('lu-logo-fallback');
+    }
+  });
 
   // ---------------------------------------------------------------------------
   // 11) الأحداث

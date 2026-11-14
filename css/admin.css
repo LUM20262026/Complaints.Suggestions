@@ -89,7 +89,23 @@
   border-bottom: 1px solid var(--lu-border);
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
 }
-.lu-topbar .page-title { font-weight: 800; font-size: 1.05rem; color: var(--lu-text); margin: 0; }
+.lu-topbar .page-title {
+  font-weight: 800; font-size: 1.05rem; color: var(--lu-text); margin: 0;
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* شعار الجامعة في الشريط العلوي (يظهر على الجوال والكمبيوتر معاً) */
+.lu-topbar-logo {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #fff;
+  padding: 3px;
+  border: 1px solid var(--lu-border-strong);
+  box-shadow: var(--lu-shadow);
+  flex-shrink: 0;
+}
 .lu-icon-btn {
   width: 40px; height: 40px; border-radius: 12px;
   display: inline-grid; place-items: center;

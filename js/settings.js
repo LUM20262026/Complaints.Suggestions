@@ -157,6 +157,7 @@ window.LUSet = (function () {
       const { data } = LU_DB.storage.from('system').getPublicUrl(path);
       const saved = await savePartial({ logo_url: data.publicUrl }, 'تم رفع الشعار وتطبيقه على الصفحة العامة', 'logo_upload');
       if (saved) $('sLogoPrev').src = saved.logo_url || 'assets/images/lotus-logo.svg';
+      if (window.LUApplyLogo) window.LUApplyLogo();   // تحديث شاشات الإدارة فوراً
     } catch (err) {
       console.error('logo upload', err);
       luToast(luErrorMessage(err, 'تعذر رفع الشعار — تحقق من صلاحياتك أو حجم الملف'), 'error');
@@ -190,6 +191,7 @@ window.LUSet = (function () {
       if (!await luConfirm({ title: 'إزالة الشعار المخصص؟', text: 'سيعود الشعار الافتراضي في الصفحة العامة.' })) return;
       await savePartial({ logo_url: null }, 'تمت الإزالة وإعادة الشعار الافتراضي', 'logo_reset');
       $('sLogoPrev').src = 'assets/images/lotus-logo.svg';
+      if (window.LUApplyLogo) window.LUApplyLogo();   // تحديث شاشات الإدارة فوراً
     });
 
     // كلمة المرور (زرار الحفظ مربوط في admin.js — رابط واحد فقط لتفادي التنفيذ المزدوج)
